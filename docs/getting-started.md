@@ -2,15 +2,15 @@
 
 Install the skills in a consuming project, establish agent guidance for a new
 project, and turn requirements into detailed designs. The examples below use
-Claude Code.
+Codex.
 
 ## Prerequisites
 
 | Tool | When it is needed |
 | --- | --- |
 | Git | Clone the toolkit and retrieve updates. |
-| Claude Code | Load and run the installed skills. |
-| Python 3 | Run the agent-file generator and diagram renderer; both use the Python standard library. |
+| Codex | Load and run the installed skills. |
+| Python 3.10 or later | Run the local installer; it uses the Python standard library. Python 3 is also needed for the agent-file generator and diagram renderer. |
 | PlantUML and Java | Render the design skill's diagrams using a local PlantUML installation. |
 
 Requirements authoring does not need the diagram tools. For Java setup, see the
@@ -25,18 +25,36 @@ git clone https://github.com/QuinntyneBrown/agent-toolkit.git
 cd agent-toolkit
 ```
 
-Choose an installation scope. These locations follow the
-[Claude Code skills documentation](https://code.claude.com/docs/en/skills#where-skills-live).
+### Personal installation (default)
+
+Run this from the toolkit checkout in PowerShell, macOS, or Linux:
+
+```sh
+python scripts/install_skills.py
+```
+
+Use `python3` if that is the Python 3 executable on the system. The installer
+copies all complete skill folders into `$CODEX_HOME/skills`, or `~/.codex/skills`
+when `CODEX_HOME` is unset. This is the destination used by Codex's bundled
+skill-installer. No plugin manifest, publishing step, or Python packages are
+required. The installed folders work independently of this checkout.
+
+The installer verifies every copied file. Rerunning it skips identical skills;
+if any existing skill differs, it stops before copying any skills. It never
+overwrites customizations. See [Updating skills](#updating-skills) for replacements.
+
+Codex also supports the `.agents/skills` discovery locations described in the
+[official skills documentation](https://learn.chatgpt.com/docs/build-skills).
+Use `--dest` to choose an alternative scope:
 
 | Scope | Destination | Availability |
 | --- | --- | --- |
-| Project | `<project>/.claude/skills/` | The consuming project. |
-| Personal | `~/.claude/skills/` | Projects used by the current user. |
+| Personal (installer default) | `$CODEX_HOME/skills/`, otherwise `~/.codex/skills/` | Projects used by the current user. |
+| Personal (alternative) | `~/.agents/skills/` | Projects used by the current user. |
+| Project | `<project>/.agents/skills/` | The consuming project. |
 
-Copy entire skill folders so references and scripts remain available. The
-commands below are for a new project installation. Replace the example project
-path with an existing project directory. If a selected skill is already installed, follow
-[Updating skills](#updating-skills) before copying.
+Choose one location to avoid duplicate entries in skill selectors. The project
+examples below install all skills into an existing consuming project.
 
 ### Windows PowerShell
 
@@ -44,15 +62,12 @@ Run from the toolkit checkout:
 
 ```powershell
 $toolkitProject = (Resolve-Path -LiteralPath 'C:\projects\my-app').Path
-$toolkitDestination = Join-Path $toolkitProject '.claude\skills'
-New-Item -ItemType Directory -Path $toolkitDestination -Force | Out-Null
-Copy-Item -LiteralPath 'skills\agent-instruction-files' -Destination $toolkitDestination -Recurse
-Copy-Item -LiteralPath 'skills\requirements-engineer' -Destination $toolkitDestination -Recurse
-Copy-Item -LiteralPath 'skills\software-design-document' -Destination $toolkitDestination -Recurse
+$toolkitDestination = Join-Path $toolkitProject '.agents\skills'
+python scripts/install_skills.py --dest $toolkitDestination
 ```
 
-For a personal installation, set `$toolkitDestination` to
-`Join-Path $env:USERPROFILE '.claude\skills'` instead.
+For the alternative personal location, pass
+`--dest (Join-Path $env:USERPROFILE '.agents\skills')` instead.
 
 ### macOS and Linux
 
@@ -60,34 +75,40 @@ Run from the toolkit checkout:
 
 ```sh
 toolkit_project='/path/to/my-app'
-toolkit_destination="$toolkit_project/.claude/skills"
-mkdir -p "$toolkit_destination"
-cp -R skills/agent-instruction-files "$toolkit_destination/"
-cp -R skills/requirements-engineer "$toolkit_destination/"
-cp -R skills/software-design-document "$toolkit_destination/"
+python3 scripts/install_skills.py --dest "$toolkit_project/.agents/skills"
 ```
 
-For a personal installation, set `toolkit_destination="$HOME/.claude/skills"`
-instead.
+For the alternative personal location, pass `--dest "$HOME/.agents/skills"` instead.
 
 The installed project structure is:
 
 ```text
 my-app/
-└── .claude/
+└── .agents/
     └── skills/
         ├── agent-instruction-files/
         │   ├── SKILL.md
         │   ├── assets/
         │   └── scripts/
         ├── requirements-engineer/
-        │   └── SKILL.md
+        │   ├── SKILL.md
+        │   └── agents/openai.yaml
         └── software-design-document/
             ├── SKILL.md
+            ├── agents/openai.yaml
             ├── references/
             ├── scripts/
             └── evals/
 ```
+
+Skills will be available on the next Codex turn. If discovery does not refresh,
+restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
+
+### Claude Code compatibility
+
+The same complete folders can be copied into `<project>/.claude/skills/` or
+`~/.claude/skills/`. Use `/agent-instruction-files`, `/requirements-engineer`, and
+`/software-design-document` there. Codex-specific `agents/openai.yaml` metadata does not replace `SKILL.md`.
 
 ## Create agent instruction files
 
@@ -96,10 +117,10 @@ uses a project description to generate guidance before implementation begins.
 Its templates prescribe .NET CLI conventions or Angular/.NET web conventions.
 It does not infer guidance from an existing codebase.
 
-Open Claude Code in the new project directory and invoke:
+Open Codex in the new project directory and invoke:
 
 ```text
-/agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
+$agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
 ```
 
 The skill writes `AGENTS.md` and pointer files for Claude, Gemini, and Copilot.
@@ -124,10 +145,10 @@ to 150 lines and reports when a long description causes truncation.
 
 ## Create requirements and designs
 
-Start Claude Code from the consuming project's root. Invoke:
+Start Codex from the consuming project's root. Invoke:
 
 ```text
-/requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
+$requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
 ```
 
 Review the L1 capabilities and L2 behaviors, including their acceptance criteria.
@@ -137,7 +158,7 @@ requirement IDs when updating a specification.
 Once both levels are present, invoke:
 
 ```text
-/software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
+$software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
 ```
 
 The design skill organizes the output by subsystem and feature. Each feature
@@ -176,12 +197,17 @@ export PLANTUML_JAR='/path/to/plantuml.jar'
 Run the renderer from the consuming project's root:
 
 ```sh
-python .claude/skills/software-design-document/scripts/render_puml.py docs/detailed-designs
+python .agents/skills/software-design-document/scripts/render_puml.py docs/detailed-designs
 ```
 
 Use `python3` if that is the Python 3 executable on the system. For a personal
 installation, replace the script path with the installed copy under
-`~/.claude/skills/software-design-document/scripts/`.
+`~/.codex/skills/software-design-document/scripts/` (or the chosen installation
+destination). For example, with the default personal installation in PowerShell:
+
+```powershell
+python "$env:USERPROFILE/.codex/skills/software-design-document/scripts/render_puml.py" docs/detailed-designs
+```
 
 Inspect the output images and confirm that every design's relative image links
 resolve. The reference templates use PlantUML's bundled C4 library, so they do
@@ -193,16 +219,17 @@ Record the toolkit revision used for an installation with `git rev-parse HEAD`.
 Retrieve updates with `git pull --ff-only` from the toolkit checkout, then review
 the [changelog](../CHANGELOG.md) and the changes to each installed skill.
 
-Before replacing an installed folder, preserve any local customizations in
-version control or a backup outside the active skills directory. Copy the complete
-updated folder and reapply intentional local changes. Check for files removed
-upstream; copying over an existing folder does not remove obsolete files.
+Before replacing an installed folder, move it to a backup outside the active
+skills directory. Run the installer again with the same destination, then reapply
+intentional local changes. Moving the old folder out first prevents obsolete
+files from surviving an update. Identical installed skills are left in place.
 
 ## Troubleshooting
 
 | Symptom | What to check |
 | --- | --- |
-| A skill is unavailable | Confirm the installed path ends in `<skill-name>/SKILL.md`. Restart Claude Code if the top-level skills directory was created after the session started. |
+| A skill is unavailable | Confirm the installed path ends in `<skill-name>/SKILL.md`, check `/skills`, and restart Codex if discovery has not refreshed. Check for disabled entries under `skills.config` in the Codex configuration. |
+| The installer reports a differing destination | Move the existing skill to a backup outside the active skills directory, then rerun with the same destination. |
 | A reference or script is missing | Copy the entire skill directory, including `references/` and `scripts/`. |
 | The agent-file generator reports a missing template | Restore the skill's `assets/` directory. Regeneration from source requires a Primer checkout, as described in the skill. |
 | The agent-file generator reports `Not a directory` | Create the target project directory before running the command. |
@@ -214,5 +241,5 @@ upstream; copying over an existing folder does not remove obsolete files.
 | A PNG is missing or appears outdated | Confirm the source path passed to the renderer, render again, and inspect the corresponding PNG. |
 
 For discovery behavior, see the
-[Claude Code documentation](https://code.claude.com/docs/en/skills#live-change-detection).
+[official Codex skills documentation](https://learn.chatgpt.com/docs/build-skills).
 For issues that remain unresolved, follow the [support guide](../SUPPORT.md).

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Requirements Engineer"
+  short_description: "Traceable L1/L2 requirements and acceptance criteria"
+  default_prompt: "Use $requirements-engineer to define L1/L2 requirements and acceptance criteria for this project."

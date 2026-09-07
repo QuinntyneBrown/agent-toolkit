@@ -36,6 +36,10 @@ The agent instruction skill's templates are exported from Primer. Follow its
 to regenerate them in a Primer checkout and copy the exports here. Keep the
 bundled assets aligned with that source.
 
+Codex UI metadata lives in each skill's `agents/openai.yaml`. Keep display names,
+descriptions, and `$skill-name` example prompts aligned with the entrypoint.
+The local installer copies complete folders without changing their contents.
+
 ## Development workflow
 
 1. Fork or clone the repository and create a branch for the change.
@@ -66,6 +70,12 @@ Run the whitespace check after staging the intended changes:
 
 ```sh
 git diff --cached --check
+```
+
+When changing installation behavior, run the isolated installer tests:
+
+```sh
+python -B scripts/test_install_skills.py
 ```
 
 The design skill's [evaluation scenarios](skills/software-design-document/evals/evals.json)

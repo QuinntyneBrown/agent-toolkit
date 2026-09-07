@@ -1,0 +1,4 @@
+interface:
+  display_name: "Software Design Document"
+  short_description: "Feature designs with requirement links and diagrams"
+  default_prompt: "Use $software-design-document to create detailed feature designs from docs/specs/, including rendered diagrams."

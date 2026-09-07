@@ -53,31 +53,38 @@ flowchart LR
    cd agent-toolkit
    ```
 
-2. Copy the desired folders from `skills/` into your project's `.claude/skills/`
-   directory, including all supporting files. See the
-   [installation guide](docs/getting-started.md#install-the-skills) for PowerShell,
-   macOS, Linux, and personal installation instructions.
+2. Install all skills into your personal Codex skills directory with Python 3.10 or later:
 
-3. Open Claude Code in that project. For a new project, establish its agent guidance:
+   ```sh
+   python scripts/install_skills.py
+   ```
+
+   The installer uses `$CODEX_HOME/skills` when set, otherwise `~/.codex/skills`.
+   It includes all supporting files and refuses to overwrite differing copies.
+   See the [installation guide](docs/getting-started.md#install-the-skills)
+   for project scope, alternative locations, and updates.
+
+3. Open Codex in the consuming project. For a new project, establish its agent guidance:
 
    ```text
-   /agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
+   $agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
    ```
 
 4. Define the requirements:
 
    ```text
-   /requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
+   $requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
    ```
 
 5. Once the L1/L2 requirements are ready, invoke the design skill:
 
    ```text
-   /software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
+   $software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
    ```
 
-Claude Code supports project and personal skill directories and invocation by
-skill name. See the [Claude Code skills documentation](https://code.claude.com/docs/en/skills).
+Codex supports explicit skill mentions and automatic selection from descriptions.
+See the [official skills documentation](https://learn.chatgpt.com/docs/build-skills).
+The folders also remain usable in Claude Code; see the installation guide.
 
 Agent-file generation requires Python 3. Diagram rendering additionally requires
 PlantUML and Java when using a PlantUML JAR.
@@ -105,14 +112,18 @@ agent-toolkit/
 │   │   ├── assets/
 │   │   └── scripts/
 │   ├── requirements-engineer/
-│   │   └── SKILL.md
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── software-design-document/
 │       ├── SKILL.md
+│       ├── agents/openai.yaml
 │       ├── references/
 │       ├── scripts/
 │       └── evals/
 ├── docs/
 │   └── getting-started.md
+├── scripts/
+│   └── install_skills.py
 ├── AGENTS.md
 └── README.md
 ```

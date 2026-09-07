@@ -9,6 +9,8 @@ under **Unreleased** until a release is published.
 
 - Agent instruction files skill from Primer, including the web and CLI templates
   and Python generator for `AGENTS.md` and agent-specific pointer files.
+- Codex UI metadata for the requirements and design skills and a verified,
+  non-overwriting local installer at `scripts/install_skills.py`.
 - Requirements engineer skill for L1/L2 specifications, Given/When/Then acceptance
   criteria, and acceptance test traceability.
 - Software design document skill for feature designs with requirement references
@@ -20,6 +22,9 @@ under **Unreleased** until a release is published.
 
 ### Changed
 
+- Made Codex installation and `$skill-name` invocation the primary setup path.
+- The design requirements gate now recognizes plain `L1-001` / `L2-001` IDs
+  produced by requirements-engineer, with a search usable in PowerShell.
 - Expanded the root README with an overview, skill catalog, quick start, workflow
   diagram, and documentation navigation.
 

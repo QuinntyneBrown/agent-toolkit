@@ -1,17 +1,10 @@
 ---
 name: software-design-document
 description: >-
-  Generate detailed software design documents from an existing L1/L2 requirements
-  set. Use this skill whenever the user wants to produce design docs, detailed
-  designs, a software design document (SDD), architecture documentation, or
-  per-feature / per-subsystem design write-ups — especially when they mention a
-  docs/specs folder, L1/L2 requirements, C4 diagrams, PlantUML, sequence or class
-  diagrams, vertical slices, or a docs/detailed-designs folder. Trigger this even
-  when the user only says "document the design", "write up the architecture",
-  "turn these requirements into designs", or "create the detailed designs"
-  without naming the format. The skill scaffolds
-  docs/detailed-designs/{subsystem}/{feature}/ with a README written in a strict
-  house style, plus rendered C4, class, and sequence diagrams shown inline.
+  Create software design documents and architecture write-ups from existing
+  L1/L2 requirements in docs/specs/. Use for detailed designs organized by
+  subsystem and feature, with requirement traceability and rendered PlantUML
+  C4, class, and sequence diagrams in docs/detailed-designs/.
 ---
 
 # Software design document
@@ -41,6 +34,9 @@ Read the three references as you reach the steps that need them:
 - `references/diagrams.md` — PlantUML templates for C4, class, and sequence.
 - `references/example-design.md` — a complete finished feature to imitate.
 
+Resolve references and `scripts/` relative to this installed skill's folder.
+Resolve `docs/` paths relative to the consuming project, not the skill folder.
+
 ---
 
 ## Step 0 — Requirements gate (do this first, every time)
@@ -53,23 +49,30 @@ Check for a `docs/specs/` folder (relative to the repo root) that contains
 markdown holding **both** L1 and L2 requirements. Detect this by searching the
 markdown for requirement identifiers at both levels. The level token (`L1`/`L2`)
 and the domain appear in **either order**, and a single spec set may **mix** the
-two conventions — treat both as valid:
+two conventions. Plain numbered IDs from the requirements-engineer skill are
+also valid; a single spec set may mix all three:
 
+- plain: `L1-<n>`, `L2-<n>` — e.g. `L1-001`, `L2-002`
 - level-first: `L1-<DOMAIN>-<n>`, `L2-<DOMAIN>-<n>` — e.g. `L1-INTAKE-001`, `L2-CONSENT-002`
 - domain-first: `<DOMAIN>-L1-<n>`, `<DOMAIN>-L2-<n>` — e.g. `INTAKE-L1-001`, `CONSENT-L2-002`
 
-Sections or tables clearly labelled L1 and L2 also count. This regex catches both
-orderings:
+Sections or tables clearly labelled L1 and L2 also count. This command works in
+PowerShell and POSIX shells and finds all three ID forms in Markdown:
 
-```bash
-ls docs/specs 2>/dev/null && grep -rroE "(L[12]-[A-Z]+|[A-Z]+-L[12])-[0-9]+" docs/specs | sort -u | head
+```sh
+rg --only-matching --glob '*.md' '\b(L[12](-[A-Z]+)?|[A-Z]+-L[12])-[0-9]+\b' docs/specs
 ```
+
+Read the matching requirement definitions and L2-to-L1 links to verify both
+levels exist; incidental mentions of an ID alone do not establish a spec set.
+If `rg` is unavailable, read the Markdown with the available filesystem tools.
 
 When you read an identifier, parse the **level** (does it contain `L1` or `L2`?)
 and the **domain** (the alphabetic segment on the other side of the level token)
 independently of their order — `L2-INTAKE-002` and `INTAKE-L2-002` denote the
 same level and domain. Keep each identifier **exactly as the spec writes it**;
-never rewrite one convention into the other.
+never rewrite one convention into the other. Plain IDs have no domain segment;
+use the spec folders, headings, and requirement text to infer subsystems.
 
 **If `docs/specs/` is missing, has no markdown, or shows no recognizable L1 and
 L2 requirements: stop and tell the user.** Say plainly what is needed — a
@@ -194,13 +197,15 @@ Render the whole tree with the bundled script (it locates `plantuml.jar` or
 `plantuml` on PATH and writes each `.png` next to its source):
 
 ```bash
-python <skill>/scripts/render_puml.py docs/detailed-designs
+python "<installed-skill-folder>/scripts/render_puml.py" docs/detailed-designs
 ```
 
 A non-zero exit means at least one diagram failed to render — an image the README
 points at does not exist. Read the reported error, fix the `.puml`, and re-run
-until the exit is clean. (Equivalent direct call if needed:
-`java -jar $PLANTUML_JAR -tpng docs/detailed-designs/**/diagrams/*.puml`.)
+until the exit is clean. Replace `<installed-skill-folder>` with the folder
+containing this `SKILL.md`. The renderer requires Python 3 and local PlantUML;
+a JAR installation also requires Java. Report missing tools if rendering cannot
+run, and do not claim the design is complete until the images are verified.
 
 ## Step 7 — Verify before finishing
 
