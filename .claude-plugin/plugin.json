@@ -1,0 +1,11 @@
+{
+  "name": "agent-toolkit",
+  "version": "0.1.0",
+  "description": "Reusable engineering skills for project guidance, requirements, and technical design.",
+  "author": {
+    "name": "QuinntyneBrown",
+    "url": "https://github.com/QuinntyneBrown"
+  },
+  "homepage": "https://github.com/QuinntyneBrown/agent-toolkit",
+  "repository": "https://github.com/QuinntyneBrown/agent-toolkit"
+}

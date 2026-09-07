@@ -8,8 +8,8 @@ Codex.
 
 | Tool | When it is needed |
 | --- | --- |
-| Git | Clone the toolkit and retrieve updates. |
-| Codex | Load and run the installed skills. |
+| Git | Retrieve the plugin marketplace or clone the toolkit. |
+| Codex CLI or Claude Code with plugin support | Install the plugin and load its skills. If `plugin` is unavailable, update the client. |
 | Python 3.10 or later | Run the local installer; it uses the Python standard library. Python 3 is also needed for the agent-file generator and diagram renderer. |
 | PlantUML and Java | Render the design skill's diagrams using a local PlantUML installation. |
 
@@ -18,6 +18,74 @@ Requirements authoring does not need the diagram tools. For Java setup, see the
 
 ## Install the skills
 
+### Codex plugin (recommended)
+
+Run in a terminal:
+
+```sh
+codex plugin marketplace add QuinntyneBrown/agent-toolkit
+codex plugin add agent-toolkit@agent-toolkit
+```
+
+### Claude Code plugin
+
+Run in a terminal:
+
+```sh
+claude plugin marketplace add QuinntyneBrown/agent-toolkit
+claude plugin install agent-toolkit@agent-toolkit
+```
+
+Inside Claude Code, the equivalent commands are:
+
+```text
+/plugin marketplace add QuinntyneBrown/agent-toolkit
+/plugin install agent-toolkit@agent-toolkit
+```
+
+The first command registers the marketplace; the second installs all three skills
+as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
+user scope if Claude's interactive installer prompts for a scope. Start a new
+session in the consuming project afterward. Neither a manual clone nor Python is
+needed for plugin installation, but the helpers still need the runtime tools
+listed above. These GitHub commands require the manifests to be on the repository's
+default branch.
+
+In Codex, type `$` and select a skill from Agent Toolkit. Plugin entries may show
+the `agent-toolkit:` namespace. In Claude Code, use:
+
+```text
+/agent-toolkit:agent-instruction-files Describe your new project here.
+/agent-toolkit:requirements-engineer Define requirements for a library lending system.
+/agent-toolkit:software-design-document Create detailed designs from docs/specs/.
+```
+
+Both plugins use the same `skills/` tree, including all templates, references,
+and helper scripts. Repository guidance such as the root `CLAUDE.md` governs
+contributors; it is not installed as context for a consuming project.
+
+See the official [Codex plugin packaging guide](https://developers.openai.com/plugins/build/plugins)
+and [Claude Code marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces).
+
+### Test a local checkout
+
+Before publishing the manifests, use an absolute path to the toolkit checkout in
+place of `QuinntyneBrown/agent-toolkit` in the marketplace-add command, then run
+the same plugin-install command. The marketplace and plugin names remain
+`agent-toolkit`. This checks local packaging; it does not test GitHub retrieval.
+Use a separate test configuration when developing so a local source does not
+replace your GitHub marketplace registration.
+
+### Switch from standalone skills
+
+Use either the plugin or standalone copies of these skills in each client to
+avoid duplicate entries. Before switching, back up any customized copies outside
+the client's active skills directories, then move the three standalone skill
+folders out of those directories. Install the plugin and start a new session.
+The plugin installer does not migrate customizations from standalone copies.
+
+### Standalone installation (alternative)
+
 Clone the toolkit if it is not already available locally:
 
 ```sh
@@ -25,7 +93,7 @@ git clone https://github.com/QuinntyneBrown/agent-toolkit.git
 cd agent-toolkit
 ```
 
-### Personal installation (default)
+### Personal standalone installation
 
 Run this from the toolkit checkout in PowerShell, macOS, or Linux:
 
@@ -36,8 +104,8 @@ python scripts/install_skills.py
 Use `python3` if that is the Python 3 executable on the system. The installer
 copies all complete skill folders into `$CODEX_HOME/skills`, or `~/.codex/skills`
 when `CODEX_HOME` is unset. This is the destination used by Codex's bundled
-skill-installer. No plugin manifest, publishing step, or Python packages are
-required. The installed folders work independently of this checkout.
+skill-installer. This alternative does not use a marketplace or require Python
+packages. The installed folders work independently of this checkout.
 
 The installer verifies every copied file. Rerunning it skips identical skills;
 if any existing skill differs, it stops before copying any skills. It never
@@ -104,7 +172,7 @@ my-app/
 Skills will be available on the next Codex turn. If discovery does not refresh,
 restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 
-### Claude Code compatibility
+### Standalone Claude Code skills
 
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/agent-instruction-files`, `/requirements-engineer`, and
@@ -196,6 +264,10 @@ export PLANTUML_JAR='/path/to/plantuml.jar'
 
 Run the renderer from the consuming project's root:
 
+For a plugin installation, ask the design skill to render the diagrams using its
+bundled helper; the client manages its installation path. The direct commands
+below apply to standalone installations.
+
 ```sh
 python .agents/skills/software-design-document/scripts/render_puml.py docs/detailed-designs
 ```
@@ -215,6 +287,32 @@ not require downloading C4 includes during rendering.
 
 ## Updating skills
 
+### Plugin installations
+
+Review the [changelog](../CHANGELOG.md) before updating. Refresh the Codex
+marketplace, then reinstall the plugin to refresh its cached bundle:
+
+```sh
+codex plugin marketplace upgrade agent-toolkit
+codex plugin remove agent-toolkit@agent-toolkit
+codex plugin add agent-toolkit@agent-toolkit
+```
+
+For Claude Code:
+
+```sh
+claude plugin marketplace update agent-toolkit
+claude plugin update agent-toolkit@agent-toolkit
+```
+
+Start a new session afterward. Treat plugin caches as managed files; keep any
+customizations separately rather than editing a cached installation. Authors
+must bump the version in both plugin manifests together when publishing changes
+so clients recognize a new release. Refreshing a marketplace alone is not the
+same as updating an installed plugin.
+
+### Standalone installations
+
 Record the toolkit revision used for an installation with `git rev-parse HEAD`.
 Retrieve updates with `git pull --ff-only` from the toolkit checkout, then review
 the [changelog](../CHANGELOG.md) and the changes to each installed skill.
@@ -228,6 +326,10 @@ files from surviving an update. Identical installed skills are left in place.
 
 | Symptom | What to check |
 | --- | --- |
+| `plugin` command is unavailable | Update the client to a version with plugin support, or use standalone installation. |
+| Marketplace cannot be found on GitHub | Confirm the repository is accessible and the client's marketplace manifest is published on the default branch. |
+| Plugin installed but skills are unavailable | Confirm `agent-toolkit@agent-toolkit` is installed and enabled with the client's `plugin list` command, then start a new session. In Claude use `/agent-toolkit:<skill-name>`. |
+| Skills appear twice | Check for standalone copies as well as the plugin; follow the migration steps above. |
 | A skill is unavailable | Confirm the installed path ends in `<skill-name>/SKILL.md`, check `/skills`, and restart Codex if discovery has not refreshed. Check for disabled entries under `skills.config` in the Codex configuration. |
 | The installer reports a differing destination | Move the existing skill to a backup outside the active skills directory, then rerun with the same destination. |
 | A reference or script is missing | Copy the entire skill directory, including `references/` and `scripts/`. |

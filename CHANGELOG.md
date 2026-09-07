@@ -7,6 +7,9 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- Codex and Claude Code plugin manifests and repository marketplaces packaging
+  all three skills as `agent-toolkit` version `0.1.0`.
+- Marketplace installation, updates, and standalone migration instructions.
 - Agent instruction files skill from Primer, including the web and CLI templates
   and Python generator for `AGENTS.md` and agent-specific pointer files.
 - Codex UI metadata for the requirements and design skills and a verified,
@@ -22,6 +25,8 @@ under **Unreleased** until a release is published.
 
 ### Changed
 
+- Made plugin marketplace installation the primary quick start for Codex and
+  Claude Code, retaining the standalone Python installer as an alternative.
 - Made Codex installation and `$skill-name` invocation the primary setup path.
 - The design requirements gate now recognizes plain `L1-001` / `L2-001` IDs
   produced by requirements-engineer, with a search usable in PowerShell.

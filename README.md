@@ -46,37 +46,55 @@ flowchart LR
 
 ## Quick start
 
-1. Clone the repository:
+### Install in Codex
 
-   ```sh
-   git clone https://github.com/QuinntyneBrown/agent-toolkit.git
-   cd agent-toolkit
-   ```
+Run these commands in a terminal with Git and a Codex CLI that supports `plugin`:
 
-2. Install all skills into your personal Codex skills directory with Python 3.10 or later:
+```sh
+codex plugin marketplace add QuinntyneBrown/agent-toolkit
+codex plugin add agent-toolkit@agent-toolkit
+```
 
-   ```sh
-   python scripts/install_skills.py
-   ```
+### Install in Claude Code
 
-   The installer uses `$CODEX_HOME/skills` when set, otherwise `~/.codex/skills`.
-   It includes all supporting files and refuses to overwrite differing copies.
-   See the [installation guide](docs/getting-started.md#install-the-skills)
-   for project scope, alternative locations, and updates.
+Run these commands in a terminal with Git and Claude Code:
 
-3. Open Codex in the consuming project. For a new project, establish its agent guidance:
+```sh
+claude plugin marketplace add QuinntyneBrown/agent-toolkit
+claude plugin install agent-toolkit@agent-toolkit
+```
+
+Or run the equivalent commands inside Claude Code:
+
+```text
+/plugin marketplace add QuinntyneBrown/agent-toolkit
+/plugin install agent-toolkit@agent-toolkit
+```
+
+For either client, the first command registers the marketplace and the second
+installs one plugin containing all three skills. Terminal commands default to
+user scope; choose user scope if Claude's interactive installer asks. Start a
+new session in your consuming project after installation. GitHub installation
+requires the marketplace files to be published on this repository's default branch.
+
+See the [installation guide](docs/getting-started.md#install-the-skills) for
+updates, local checkout testing, and switching from manually copied skills.
+
+### Use the skills
+
+1. Open Codex in the consuming project. For a new project, establish its agent guidance:
 
    ```text
    $agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
    ```
 
-4. Define the requirements:
+2. Define the requirements:
 
    ```text
    $requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
    ```
 
-5. Once the L1/L2 requirements are ready, invoke the design skill:
+3. Once the L1/L2 requirements are ready, invoke the design skill:
 
    ```text
    $software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
@@ -84,7 +102,31 @@ flowchart LR
 
 Codex supports explicit skill mentions and automatic selection from descriptions.
 See the [official skills documentation](https://learn.chatgpt.com/docs/build-skills).
-The folders also remain usable in Claude Code; see the installation guide.
+In Codex, type `$` and select the skill from the Agent Toolkit plugin; plugin
+entries may display the `agent-toolkit:` namespace. In Claude Code, invoke the
+plugin skills with their namespace:
+
+```text
+/agent-toolkit:agent-instruction-files Describe your new project here.
+/agent-toolkit:requirements-engineer Define requirements for a library lending system.
+/agent-toolkit:software-design-document Create detailed designs from docs/specs/.
+```
+
+### Alternative: install standalone skills
+
+To copy the skills into your personal Codex skills directory using Python 3.10
+or later:
+
+```sh
+git clone https://github.com/QuinntyneBrown/agent-toolkit.git
+cd agent-toolkit
+python scripts/install_skills.py
+```
+
+The installer uses `$CODEX_HOME/skills` when set, otherwise `~/.codex/skills`.
+It includes all supporting files and refuses to overwrite differing copies.
+Choose either plugin installation or standalone copies to avoid duplicate skills.
+Python is not required to install the plugin.
 
 Agent-file generation requires Python 3. Diagram rendering additionally requires
 PlantUML and Java when using a PlantUML JAR.
@@ -106,6 +148,11 @@ configuration and platform dependencies.
 
 ```text
 agent-toolkit/
+├── .agents/plugins/marketplace.json
+├── .codex-plugin/plugin.json
+├── .claude-plugin/
+│   ├── marketplace.json
+│   └── plugin.json
 ├── skills/
 │   ├── agent-instruction-files/
 │   │   ├── SKILL.md

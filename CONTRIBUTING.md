@@ -51,6 +51,32 @@ The local installer copies complete folders without changing their contents.
 
 ## Validation
 
+### Plugin releases
+
+The repository root is one plugin shared by both clients. Keep the name
+`agent-toolkit` and the same semantic version in `.codex-plugin/plugin.json` and
+`.claude-plugin/plugin.json`. Bump both versions for every published plugin
+change, including bundled skills and resources. Keep version numbers out of the
+marketplace entries so the plugin manifests remain their source of truth.
+
+Both marketplace sources point to `./`; keep all bundled resources inside the
+repository. Validate the Claude manifests with:
+
+```sh
+claude plugin validate .claude-plugin/plugin.json
+claude plugin validate .claude-plugin/marketplace.json
+```
+
+The warning that the repository's `CLAUDE.md` is not loaded as plugin context is
+expected: that file is contributor guidance, and the skills supply plugin
+instructions. Validate Codex packaging with the plugin-creator skill's validator
+when available, and test both clients' local marketplace-add and install flows
+in isolated configurations. Confirm all three skills and their supporting files
+exist in each installed bundle. Publish the manifests on the default branch
+before advertising GitHub installation as tested.
+
+### Checks for changes
+
 Match validation to the change. Documentation edits need working links, readable
 Markdown, and commands that match the repository. Skill changes also need a
 representative request exercised in a separate sample project.

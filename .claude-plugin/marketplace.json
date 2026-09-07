@@ -1,0 +1,16 @@
+{
+  "name": "agent-toolkit",
+  "owner": {
+    "name": "QuinntyneBrown"
+  },
+  "metadata": {
+    "description": "Reusable engineering skills for project guidance, requirements, and technical design."
+  },
+  "plugins": [
+    {
+      "name": "agent-toolkit",
+      "source": "./",
+      "description": "Install all three Agent Toolkit engineering skills."
+    }
+  ]
+}
