@@ -71,7 +71,7 @@ The warning that the repository's `CLAUDE.md` is not loaded as plugin context is
 expected: that file is contributor guidance, and the skills supply plugin
 instructions. Validate Codex packaging with the plugin-creator skill's validator
 when available, and test both clients' local marketplace-add and install flows
-in isolated configurations. Confirm all three skills and their supporting files
+in isolated configurations. Confirm all four skills and their supporting files
 exist in each installed bundle. Publish the manifests on the default branch
 before advertising GitHub installation as tested.
 
@@ -108,6 +108,14 @@ The design skill's [evaluation scenarios](skills/software-design-document/evals/
 describe expected behaviors. Their named fixture projects were not included in
 the original import, and the repository has no bundled evaluation runner. Use
 appropriate sample projects and state which scenarios were actually exercised.
+
+The demo skill's [evaluation scenarios](skills/demo-video/evals/evals.json) cover
+application discovery, real recordings, failure handling, and resource ownership.
+Create the described fixtures in disposable sample projects; no agent evaluation
+runner is bundled. Inspect the encoded videos and record actual results separately
+from the scenario definitions.
+See the [demo validation record](skills/demo-video/evals/validation.md) for the
+executed sample and coverage limits.
 
 ## Pull requests
 

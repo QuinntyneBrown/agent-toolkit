@@ -12,6 +12,7 @@ Codex.
 | Codex CLI or Claude Code with plugin support | Install the plugin and load its skills. If `plugin` is unavailable, update the client. |
 | Python 3.10 or later | Run the local installer; it uses the Python standard library. Python 3 is also needed for the agent-file generator and diagram renderer. |
 | PlantUML and Java | Render the design skill's diagrams using a local PlantUML installation. |
+| Application runtimes and capture tools | Record demos locally. Browser capture prefers Playwright and Chromium; terminal/native apps need compatible capture and WebM encoding tools. |
 
 Requirements authoring does not need the diagram tools. For Java setup, see the
 [PlantUML installation guide](https://plantuml.com/starting).
@@ -43,7 +44,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all three skills
+The first command registers the marketplace; the second installs all four skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -58,6 +59,7 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:agent-instruction-files Describe your new project here.
 /agent-toolkit:requirements-engineer Define requirements for a library lending system.
 /agent-toolkit:software-design-document Create detailed designs from docs/specs/.
+/agent-toolkit:demo-video Create a demo video for each executable application.
 ```
 
 Both plugins use the same `skills/` tree, including all templates, references,
@@ -80,7 +82,7 @@ replace your GitHub marketplace registration.
 
 Use either the plugin or standalone copies of these skills in each client to
 avoid duplicate entries. Before switching, back up any customized copies outside
-the client's active skills directories, then move the three standalone skill
+the client's active skills directories, then move the corresponding standalone skill
 folders out of those directories. Install the plugin and start a new session.
 The plugin installer does not migrate customizations from standalone copies.
 
@@ -161,6 +163,11 @@ my-app/
         ├── requirements-engineer/
         │   ├── SKILL.md
         │   └── agents/openai.yaml
+        ├── demo-video/
+        │   ├── SKILL.md
+        │   ├── agents/openai.yaml
+        │   ├── references/
+        │   └── evals/
         └── software-design-document/
             ├── SKILL.md
             ├── agents/openai.yaml
@@ -175,8 +182,9 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 ### Standalone Claude Code skills
 
 The same complete folders can be copied into `<project>/.claude/skills/` or
-`~/.claude/skills/`. Use `/agent-instruction-files`, `/requirements-engineer`, and
-`/software-design-document` there. Codex-specific `agents/openai.yaml` metadata does not replace `SKILL.md`.
+`~/.claude/skills/`. Use `/agent-instruction-files`, `/requirements-engineer`,
+`/software-design-document`, and `/demo-video` there. Codex-specific
+`agents/openai.yaml` metadata does not replace `SKILL.md`.
 
 ## Create agent instruction files
 
@@ -235,6 +243,39 @@ sections, plus PlantUML sources and PNG images in a `diagrams/` directory.
 
 Review the designs against the source requirements. Acceptance tests are written
 during development, using the L2 traceability convention in the requirements skill.
+
+## Create application demo videos
+
+Open the consuming repository and invoke:
+
+```text
+$demo-video Understand this repository and create a captioned demo video for each executable application in docs/demo/.
+```
+
+The [demo video skill](../skills/demo-video/SKILL.md) reads source, tests, startup
+scripts, and any existing specifications or detailed designs. It discovers web
+apps, CLIs, APIs, workers, and native apps, then records real local workflows with
+assertions. Missing `docs/specs/` or `docs/detailed-designs/` does not block it.
+Name particular applications in the request to narrow the recording scope.
+
+Prepare the application's normal local runtimes and dependencies. The agent
+checks capture capabilities and uses isolated demo data. For browser apps it
+prefers the repository's Playwright installation and Chromium. Noninteractive
+CLI output may be streamed live into a recorded browser display; interactive
+terminal and native apps need compatible terminal or desktop capture. A full
+FFmpeg installation is only needed when the selected capture/conversion method
+requires it; do not assume Playwright's encoder includes ffprobe or MP4 support.
+
+Default output is silent, captioned 1280 × 720 WebM footage, usually two to five
+minutes per app, plus a poster and chapters in `docs/demo/README.md`. That README
+records the actual setup and rerun commands, demonstrated workflows, substitutions,
+and blockers. Recording scripts live in the project's existing test or script
+structure, separately from ordinary acceptance runs. There is no universal rerun
+command across frameworks.
+
+The skill fixes recording and setup problems. Product repairs require expanded
+user scope. If an app cannot run or be captured, it reports the precise blocker
+and completes independent apps. Existing successful videos survive failed reruns.
 
 ## Configure diagram rendering
 

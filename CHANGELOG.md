@@ -7,6 +7,9 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- Demo video skill for repository discovery and verified local recordings of web,
+  CLI, API, worker, and native applications, with captions, posters, chapters,
+  reproducible commands, capture references, and evaluation scenarios.
 - Codex and Claude Code plugin manifests and repository marketplaces packaging
   all three skills as `agent-toolkit` version `0.1.0`.
 - Marketplace installation, updates, and standalone migration instructions.
@@ -25,6 +28,8 @@ under **Unreleased** until a release is published.
 
 ### Changed
 
+- Advanced both plugin manifests to `0.2.0` and expanded the catalog and setup
+  guidance to include all four skills.
 - Made plugin marketplace installation the primary quick start for Codex and
   Claude Code, retaining the standalone Python installer as an alternative.
 - Made Codex installation and `$skill-name` invocation the primary setup path.

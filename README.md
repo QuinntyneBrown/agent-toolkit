@@ -1,6 +1,6 @@
 # Agent Toolkit
 
-**Reusable agent skills for project guidance, requirements, and technical design.**
+**Reusable agent skills for project guidance, requirements, design, and demo videos.**
 
 Agent Toolkit packages engineering workflows as version-controlled instructions,
 references, and helper scripts. Use the skills across projects to establish coding
@@ -25,6 +25,8 @@ that trace back to testable requirements.
   PlantUML and render PNG images for inline viewing on GitHub.
 - **Portable skill folders.** Keep each skill's instructions and supporting
   resources together so they can be copied into a consuming project.
+- **Verified application demos.** Discover runnable applications and record
+  captioned walkthroughs with posters, chapters, and reproducible commands.
 
 ## Available skills
 
@@ -33,9 +35,12 @@ that trace back to testable requirements.
 | [Agent instruction files](skills/agent-instruction-files/SKILL.md) | Establish guidance for a new .NET CLI or Angular/.NET web project from its description. | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.github/copilot-instructions.md` |
 | [Requirements engineer](skills/requirements-engineer/SKILL.md) | Create and maintain L1/L2 requirements, acceptance criteria, and test traceability. | `docs/specs/L1.md` and `docs/specs/L2.md` |
 | [Software design document](skills/software-design-document/SKILL.md) | Develop feature designs from existing requirements, including components and rendered diagrams. | `docs/detailed-designs/{subsystem}/{feature}/` |
+| [Demo video](skills/demo-video/SKILL.md) | Understand and run executable applications, then record verified walkthroughs of each. | `docs/demo/` videos, posters, and a README; recording scripts in the project's test or script structure |
 
 The design skill requires existing L1 and L2 requirements under `docs/specs/`.
 The requirements skill establishes the acceptance criteria used during development.
+The demo skill requires locally runnable applications; specifications and designs
+are useful inputs but are optional.
 
 ```mermaid
 flowchart LR
@@ -72,7 +77,7 @@ Or run the equivalent commands inside Claude Code:
 ```
 
 For either client, the first command registers the marketplace and the second
-installs one plugin containing all three skills. Terminal commands default to
+installs one plugin containing all four skills. Terminal commands default to
 user scope; choose user scope if Claude's interactive installer asks. Start a
 new session in your consuming project after installation. GitHub installation
 requires the marketplace files to be published on this repository's default branch.
@@ -100,6 +105,12 @@ updates, local checkout testing, and switching from manually copied skills.
    $software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
    ```
 
+4. When the applications run locally, create their demonstrations:
+
+   ```text
+   $demo-video Understand this repository and create a captioned demo video for each executable application in docs/demo/.
+   ```
+
 Codex supports explicit skill mentions and automatic selection from descriptions.
 See the [official skills documentation](https://learn.chatgpt.com/docs/build-skills).
 In Codex, type `$` and select the skill from the Agent Toolkit plugin; plugin
@@ -110,6 +121,7 @@ plugin skills with their namespace:
 /agent-toolkit:agent-instruction-files Describe your new project here.
 /agent-toolkit:requirements-engineer Define requirements for a library lending system.
 /agent-toolkit:software-design-document Create detailed designs from docs/specs/.
+/agent-toolkit:demo-video Create a demo video for each executable application.
 ```
 
 ### Alternative: install standalone skills
@@ -132,6 +144,8 @@ Agent-file generation requires Python 3. Diagram rendering additionally requires
 PlantUML and Java when using a PlantUML JAR.
 See [diagram setup](docs/getting-started.md#configure-diagram-rendering) for
 configuration and platform dependencies.
+Demo recording needs the application's own runtimes and a suitable capture tool;
+see [demo setup](docs/getting-started.md#create-application-demo-videos).
 
 ## Documentation
 
@@ -161,6 +175,11 @@ agent-toolkit/
 │   ├── requirements-engineer/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
+│   ├── demo-video/
+│   │   ├── SKILL.md
+│   │   ├── agents/openai.yaml
+│   │   ├── references/
+│   │   └── evals/
 │   └── software-design-document/
 │       ├── SKILL.md
 │       ├── agents/openai.yaml

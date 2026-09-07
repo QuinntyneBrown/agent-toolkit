@@ -4,13 +4,13 @@
     "name": "QuinntyneBrown"
   },
   "metadata": {
-    "description": "Reusable engineering skills for project guidance, requirements, and technical design."
+    "description": "Reusable engineering skills for project guidance, requirements, technical design, and application demo videos."
   },
   "plugins": [
     {
       "name": "agent-toolkit",
       "source": "./",
-      "description": "Install all three Agent Toolkit engineering skills."
+      "description": "Install all four Agent Toolkit engineering skills."
     }
   ]
 }

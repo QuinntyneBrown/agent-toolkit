@@ -1,7 +1,7 @@
 {
   "name": "agent-toolkit",
-  "version": "0.1.0",
-  "description": "Reusable engineering skills for project guidance, requirements, and technical design.",
+  "version": "0.2.0",
+  "description": "Reusable engineering skills for project guidance, requirements, technical design, and application demo videos.",
   "author": {
     "name": "QuinntyneBrown",
     "url": "https://github.com/QuinntyneBrown"
@@ -11,8 +11,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Agent Toolkit",
-    "shortDescription": "Project guidance, requirements, and technical design",
-    "longDescription": "Generate agent instruction files, define traceable L1/L2 requirements, and create detailed software designs with diagrams using three bundled engineering skills.",
+    "shortDescription": "Project guidance, requirements, designs, and demo videos",
+    "longDescription": "Generate agent instruction files, define traceable L1/L2 requirements, create detailed software designs with diagrams, and record verified application demos using four bundled engineering skills.",
     "developerName": "QuinntyneBrown",
     "category": "Productivity",
     "capabilities": ["Interactive", "Write"],
@@ -20,7 +20,8 @@
     "defaultPrompt": [
       "Create agent instruction files for a new project.",
       "Define L1 and L2 requirements for my application.",
-      "Create detailed designs from docs/specs/."
+      "Create detailed designs from docs/specs/.",
+      "Create a demo video for each executable application in this repository."
     ]
   }
 }
