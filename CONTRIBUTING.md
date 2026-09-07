@@ -31,6 +31,11 @@ skills need the same material.
 Write portable paths and state external tool dependencies. Keep rules specific
 to a consuming project in that project's `AGENTS.md`.
 
+The agent instruction skill's templates are exported from Primer. Follow its
+[template maintenance instructions](skills/agent-instruction-files/SKILL.md#where-the-guidance-comes-from)
+to regenerate them in a Primer checkout and copy the exports here. Keep the
+bundled assets aligned with that source.
+
 ## Development workflow
 
 1. Fork or clone the repository and create a branch for the change.

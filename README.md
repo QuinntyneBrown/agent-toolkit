@@ -1,11 +1,11 @@
 # Agent Toolkit
 
-**Reusable agent skills for software requirements and technical design.**
+**Reusable agent skills for project guidance, requirements, and technical design.**
 
 Agent Toolkit packages engineering workflows as version-controlled instructions,
-references, and helper scripts. Use the skills across projects to define system
-behavior, write testable requirements, and produce design documents with diagrams
-that trace back to those requirements.
+references, and helper scripts. Use the skills across projects to establish coding
+conventions, define system behavior, and produce design documents with diagrams
+that trace back to testable requirements.
 
 [Getting started](docs/getting-started.md) ·
 [Available skills](#available-skills) ·
@@ -15,6 +15,8 @@ that trace back to those requirements.
 
 ## Overview
 
+- **Project guidance.** Generate `AGENTS.md` and agent-specific pointer files from
+  a description of a new project using the bundled web or CLI conventions.
 - **Traceable requirements.** Capture high-level capabilities (L1) and detailed
   behaviors (L2), with Given/When/Then acceptance criteria.
 - **Consistent design documents.** Organize designs by subsystem and feature,
@@ -28,6 +30,7 @@ that trace back to those requirements.
 
 | Skill | Use it to | Output in the consuming project |
 | --- | --- | --- |
+| [Agent instruction files](skills/agent-instruction-files/SKILL.md) | Establish guidance for a new .NET CLI or Angular/.NET web project from its description. | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.github/copilot-instructions.md` |
 | [Requirements engineer](skills/requirements-engineer/SKILL.md) | Create and maintain L1/L2 requirements, acceptance criteria, and test traceability. | `docs/specs/L1.md` and `docs/specs/L2.md` |
 | [Software design document](skills/software-design-document/SKILL.md) | Develop feature designs from existing requirements, including components and rendered diagrams. | `docs/detailed-designs/{subsystem}/{feature}/` |
 
@@ -55,13 +58,19 @@ flowchart LR
    [installation guide](docs/getting-started.md#install-the-skills) for PowerShell,
    macOS, Linux, and personal installation instructions.
 
-3. Open Claude Code in that project and invoke the requirements skill:
+3. Open Claude Code in that project. For a new project, establish its agent guidance:
+
+   ```text
+   /agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
+   ```
+
+4. Define the requirements:
 
    ```text
    /requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
    ```
 
-4. Once the L1/L2 requirements are ready, invoke the design skill:
+5. Once the L1/L2 requirements are ready, invoke the design skill:
 
    ```text
    /software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
@@ -70,7 +79,8 @@ flowchart LR
 Claude Code supports project and personal skill directories and invocation by
 skill name. See the [Claude Code skills documentation](https://code.claude.com/docs/en/skills).
 
-Diagram rendering requires Python 3, PlantUML, and Java when using a PlantUML JAR.
+Agent-file generation requires Python 3. Diagram rendering additionally requires
+PlantUML and Java when using a PlantUML JAR.
 See [diagram setup](docs/getting-started.md#configure-diagram-rendering) for
 configuration and platform dependencies.
 
@@ -90,6 +100,10 @@ configuration and platform dependencies.
 ```text
 agent-toolkit/
 ├── skills/
+│   ├── agent-instruction-files/
+│   │   ├── SKILL.md
+│   │   ├── assets/
+│   │   └── scripts/
 │   ├── requirements-engineer/
 │   │   └── SKILL.md
 │   └── software-design-document/
