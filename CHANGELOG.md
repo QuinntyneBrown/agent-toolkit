@@ -7,6 +7,10 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- Video creator skill for narrated slide-deck videos: a transcript, a cued
+  HTML slide deck, and an outline in `docs/videos/`, synthesized with free
+  `edge-tts` narration and encoded as a captioned 1080p MP4 with headless
+  Chrome and ffmpeg, with Codex UI metadata.
 - Demo video skill for repository discovery and verified local recordings of web,
   CLI, API, worker, and native applications, with captions, posters, chapters,
   reproducible commands, capture references, and evaluation scenarios.
@@ -28,6 +32,13 @@ under **Unreleased** until a release is published.
 
 ### Changed
 
+- The demo video skill now requires edge-tts voice narration using the same
+  narrator and second-speaker voices as the video creator skill, synthesized
+  before capture, timed to the captions, and muxed into the WebM as an Opus
+  track; ffmpeg and Python with `edge-tts` are now demo prerequisites, and a
+  narration-unavailable evaluation scenario was added.
+- Advanced both plugin manifests to `0.3.0` and expanded the catalog, setup
+  guidance, and troubleshooting table to include all five skills.
 - Advanced both plugin manifests to `0.2.0` and expanded the catalog and setup
   guidance to include all four skills.
 - Made plugin marketplace installation the primary quick start for Codex and
@@ -49,3 +60,11 @@ The agent instruction files skill was imported from
 `primer/.claude/skills/agent-instruction-files/`. Its renderer and templates were
 preserved. The instructions now use the installed skill path and identify the
 Primer checkout as the place to run template export commands.
+
+The video creator skill was imported from
+`saturdaze/.agents/skills/video-creator/SKILL.md`. Its workflow, file formats,
+and tooling description were preserved. The description now distinguishes it
+from the demo video skill, and the tooling example no longer names that
+product or assumes its scripts exist; it links to the Saturdaze implementation
+as a reference instead. The Node tools and shared slide assets were not
+bundled because they carry that product's branding and pronunciation lexicon.

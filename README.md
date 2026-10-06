@@ -1,6 +1,6 @@
 # Agent Toolkit
 
-**Reusable agent skills for project guidance, requirements, design, and demo videos.**
+**Reusable agent skills for project guidance, requirements, design, demo videos, and narrated videos.**
 
 Agent Toolkit packages engineering workflows as version-controlled instructions,
 references, and helper scripts. Use the skills across projects to establish coding
@@ -26,7 +26,9 @@ that trace back to testable requirements.
 - **Portable skill folders.** Keep each skill's instructions and supporting
   resources together so they can be copied into a consuming project.
 - **Verified application demos.** Discover runnable applications and record
-  captioned walkthroughs with posters, chapters, and reproducible commands.
+  narrated, captioned walkthroughs with posters, chapters, and reproducible commands.
+- **Narrated explainer videos.** Author a transcript, a cued HTML slide deck,
+  and an outline, then synthesize narration and encode a captioned 1080p MP4.
 
 ## Available skills
 
@@ -35,12 +37,16 @@ that trace back to testable requirements.
 | [Agent instruction files](skills/agent-instruction-files/SKILL.md) | Establish guidance for a new .NET CLI or Angular/.NET web project from its description. | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.github/copilot-instructions.md` |
 | [Requirements engineer](skills/requirements-engineer/SKILL.md) | Create and maintain L1/L2 requirements, acceptance criteria, and test traceability. | `docs/specs/L1.md` and `docs/specs/L2.md` |
 | [Software design document](skills/software-design-document/SKILL.md) | Develop feature designs from existing requirements, including components and rendered diagrams. | `docs/detailed-designs/{subsystem}/{feature}/` |
-| [Demo video](skills/demo-video/SKILL.md) | Understand and run executable applications, then record verified walkthroughs of each. | `docs/demo/` videos, posters, and a README; recording scripts in the project's test or script structure |
+| [Demo video](skills/demo-video/SKILL.md) | Understand and run executable applications, then record verified, voice-narrated walkthroughs of each. | `docs/demo/` videos, posters, narration text, and a README; recording scripts in the project's test or script structure |
+| [Video creator](skills/video-creator/SKILL.md) | Script, build, and verify a narrated slide-deck video about the repository or product. | `docs/videos/NN-topic/` with `script.md`, `slides.html`, `README.md`, an MP3, and a captioned MP4 |
 
 The design skill requires existing L1 and L2 requirements under `docs/specs/`.
 The requirements skill establishes the acceptance criteria used during development.
 The demo skill requires locally runnable applications; specifications and designs
-are useful inputs but are optional.
+are useful inputs but are optional. Both video skills narrate with the free
+`edge-tts` package and the same two voices. The video creator skill records
+nothing on screen: it explains a topic with narrated slides generated from text
+files, so it needs ffmpeg, a Chromium-based browser, and Python with `edge-tts`.
 
 ```mermaid
 flowchart LR
@@ -77,7 +83,7 @@ Or run the equivalent commands inside Claude Code:
 ```
 
 For either client, the first command registers the marketplace and the second
-installs one plugin containing all four skills. Terminal commands default to
+installs one plugin containing all five skills. Terminal commands default to
 user scope; choose user scope if Claude's interactive installer asks. Start a
 new session in your consuming project after installation. GitHub installation
 requires the marketplace files to be published on this repository's default branch.
@@ -108,7 +114,13 @@ updates, local checkout testing, and switching from manually copied skills.
 4. When the applications run locally, create their demonstrations:
 
    ```text
-   $demo-video Understand this repository and create a captioned demo video for each executable application in docs/demo/.
+   $demo-video Understand this repository and create a narrated, captioned demo video for each executable application in docs/demo/.
+   ```
+
+5. To explain a topic with narrated slides instead of a screen recording:
+
+   ```text
+   $video-creator Create a narrated video that explains how the loan workflow is implemented in this repository.
    ```
 
 Codex supports explicit skill mentions and automatic selection from descriptions.
@@ -122,6 +134,7 @@ plugin skills with their namespace:
 /agent-toolkit:requirements-engineer Define requirements for a library lending system.
 /agent-toolkit:software-design-document Create detailed designs from docs/specs/.
 /agent-toolkit:demo-video Create a demo video for each executable application.
+/agent-toolkit:video-creator Create a narrated video that explains the loan workflow.
 ```
 
 ### Alternative: install standalone skills
@@ -144,8 +157,11 @@ Agent-file generation requires Python 3. Diagram rendering additionally requires
 PlantUML and Java when using a PlantUML JAR.
 See [diagram setup](docs/getting-started.md#configure-diagram-rendering) for
 configuration and platform dependencies.
-Demo recording needs the application's own runtimes and a suitable capture tool;
+Demo recording needs the application's own runtimes, a suitable capture tool,
+ffmpeg, and Python with `edge-tts` for narration;
 see [demo setup](docs/getting-started.md#create-application-demo-videos).
+Narrated videos need Node, ffmpeg, a Chromium-based browser, and Python with the
+`edge-tts` package; see [video setup](docs/getting-started.md#create-narrated-videos).
 
 ## Documentation
 
@@ -180,12 +196,15 @@ agent-toolkit/
 │   │   ├── agents/openai.yaml
 │   │   ├── references/
 │   │   └── evals/
-│   └── software-design-document/
+│   ├── software-design-document/
+│   │   ├── SKILL.md
+│   │   ├── agents/openai.yaml
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   └── evals/
+│   └── video-creator/
 │       ├── SKILL.md
-│       ├── agents/openai.yaml
-│       ├── references/
-│       ├── scripts/
-│       └── evals/
+│       └── agents/openai.yaml
 ├── docs/
 │   └── getting-started.md
 ├── scripts/

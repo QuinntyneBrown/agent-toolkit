@@ -71,7 +71,7 @@ The warning that the repository's `CLAUDE.md` is not loaded as plugin context is
 expected: that file is contributor guidance, and the skills supply plugin
 instructions. Validate Codex packaging with the plugin-creator skill's validator
 when available, and test both clients' local marketplace-add and install flows
-in isolated configurations. Confirm all four skills and their supporting files
+in isolated configurations. Confirm all five skills and their supporting files
 exist in each installed bundle. Publish the manifests on the default branch
 before advertising GitHub installation as tested.
 

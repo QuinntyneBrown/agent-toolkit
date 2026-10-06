@@ -67,9 +67,13 @@ Encoding a captured terminal stream or transcoding continuous native footage is
 acceptable; disclose the method and retain its reproducible source. Do not splice
 unrelated runs, remove a failed step, or insert fabricated application output.
 Use title cards and captions with the same readability goals as browser demos.
+Narrate the take the same way: synthesize the paragraphs with edge-tts before
+capture, hold each caption for at least its clip's duration, log when it
+appeared, and mux the assembled Opus track into the finished WebM afterward.
 
 Check recorder and encoder exit status, finalize files, inspect decoded playback,
 measure media properties, verify chapter times, and extract a representative
 poster. Keep the previous deliverables until the replacement passes all checks.
-Missing capture or encoding tools are actionable blockers, not grounds to deliver
-only a transcript, screenshot slideshow, or empty video as a completed demo.
+Missing capture, narration, or encoding tools are actionable blockers, not
+grounds to deliver a silent video, a transcript, a screenshot slideshow, or an
+empty video as a completed demo.
