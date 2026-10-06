@@ -10,7 +10,7 @@
       "expected": [
         "Discovers the web app and CLI; excludes the library and test runner.",
         "Infers workflows without requiring new specifications or designs.",
-        "Produces two playable, captioned WebM files and posters from decoded successful footage, with measured metadata and accurate chapters.",
+        "Produces two playable WebM files with an Opus narration track synthesized by edge-tts using en-US-AndrewMultilingualNeural, captions matching the narration text, and posters from decoded successful footage, with measured metadata and accurate chapters.",
         "CLI output comes from commands executed during capture; assertions verify persisted records.",
         "Documents and successfully exercises a clean rerun command."
       ]
@@ -71,6 +71,18 @@
         "Explains that the library-only repository has no executable product to record.",
         "For the scoped request, records only the selected application and labels other applications as out of the user's scope.",
         "Preserves unrelated existing demo content."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "narration-tools-unavailable",
+      "setup": "The browser application from scenario 1 in an environment where the edge-tts package cannot be installed or synthesis has no network access, while Playwright, Chromium, and ffmpeg are available.",
+      "prompt": "Create a demo video for the web application in this repository.",
+      "expected": [
+        "Detects the missing narration capability before or during synthesis and names the exact installation or connectivity step that remains.",
+        "Keeps the recording and its narration text in staging; does not promote a silent WebM into docs/demo/ or describe it as complete.",
+        "Does not substitute silence, placeholder audio, or a transcript for the narration.",
+        "Reports partial completion with the rerun commands that will produce the narrated video once the tool is available."
       ]
     }
   ]

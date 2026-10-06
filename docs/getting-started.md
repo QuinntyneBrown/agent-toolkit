@@ -12,7 +12,8 @@ Codex.
 | Codex CLI or Claude Code with plugin support | Install the plugin and load its skills. If `plugin` is unavailable, update the client. |
 | Python 3.10 or later | Run the local installer; it uses the Python standard library. Python 3 is also needed for the agent-file generator and diagram renderer. |
 | PlantUML and Java | Render the design skill's diagrams using a local PlantUML installation. |
-| Application runtimes and capture tools | Record demos locally. Browser capture prefers Playwright and Chromium; terminal/native apps need compatible capture and WebM encoding tools. |
+| Application runtimes and capture tools | Record demos locally. Browser capture prefers Playwright and Chromium; terminal/native apps need compatible capture and WebM encoding tools. Narration also needs ffmpeg and Python with `edge-tts`. |
+| Node.js, ffmpeg, a Chromium-based browser, and Python with `edge-tts` | Build narrated videos. The audio generator and video builder run on Node, synthesize narration with `edge-tts`, screenshot slides in headless Chrome or Edge, and encode MP4 files with ffmpeg (libx264 and libass). |
 
 Requirements authoring does not need the diagram tools. For Java setup, see the
 [PlantUML installation guide](https://plantuml.com/starting).
@@ -44,7 +45,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all four skills
+The first command registers the marketplace; the second installs all five skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -60,6 +61,7 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:requirements-engineer Define requirements for a library lending system.
 /agent-toolkit:software-design-document Create detailed designs from docs/specs/.
 /agent-toolkit:demo-video Create a demo video for each executable application.
+/agent-toolkit:video-creator Create a narrated video that explains the loan workflow.
 ```
 
 Both plugins use the same `skills/` tree, including all templates, references,
@@ -168,12 +170,15 @@ my-app/
         │   ├── agents/openai.yaml
         │   ├── references/
         │   └── evals/
-        └── software-design-document/
+        ├── software-design-document/
+        │   ├── SKILL.md
+        │   ├── agents/openai.yaml
+        │   ├── references/
+        │   ├── scripts/
+        │   └── evals/
+        └── video-creator/
             ├── SKILL.md
-            ├── agents/openai.yaml
-            ├── references/
-            ├── scripts/
-            └── evals/
+            └── agents/openai.yaml
 ```
 
 Skills will be available on the next Codex turn. If discovery does not refresh,
@@ -183,7 +188,7 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/agent-instruction-files`, `/requirements-engineer`,
-`/software-design-document`, and `/demo-video` there. Codex-specific
+`/software-design-document`, `/demo-video`, and `/video-creator` there. Codex-specific
 `agents/openai.yaml` metadata does not replace `SKILL.md`.
 
 ## Create agent instruction files
@@ -249,7 +254,7 @@ during development, using the L2 traceability convention in the requirements ski
 Open the consuming repository and invoke:
 
 ```text
-$demo-video Understand this repository and create a captioned demo video for each executable application in docs/demo/.
+$demo-video Understand this repository and create a narrated, captioned demo video for each executable application in docs/demo/.
 ```
 
 The [demo video skill](../skills/demo-video/SKILL.md) reads source, tests, startup
@@ -263,19 +268,61 @@ checks capture capabilities and uses isolated demo data. For browser apps it
 prefers the repository's Playwright installation and Chromium. Noninteractive
 CLI output may be streamed live into a recorded browser display; interactive
 terminal and native apps need compatible terminal or desktop capture. A full
-FFmpeg installation is only needed when the selected capture/conversion method
-requires it; do not assume Playwright's encoder includes ffprobe or MP4 support.
+FFmpeg installation is required to mux the narration and inspect media; do not
+assume Playwright's encoder includes ffprobe or MP4 support.
 
-Default output is silent, captioned 1280 × 720 WebM footage, usually two to five
-minutes per app, plus a poster and chapters in `docs/demo/README.md`. That README
-records the actual setup and rerun commands, demonstrated workflows, substitutions,
-and blockers. Recording scripts live in the project's existing test or script
+Every demo is voice-narrated. The skill writes the narration as short paragraphs
+per chapter, synthesizes them with the free `edge-tts` package using the same
+voices as the video creator skill (`en-US-AndrewMultilingualNeural` for the
+narrator and `en-US-AvaMultilingualNeural` for a second speaker; `EDGE_VOICE`
+and `EDGE_VOICE_2` override them), holds each caption for at least its clip's
+length, and muxes the assembled Opus track into the WebM after capture. If
+`edge-tts`, internet access, or ffmpeg is unavailable, the silent recording
+stays in staging and the skill reports the remaining commands instead of
+delivering it.
+
+Default output is narrated, captioned 1280 × 720 WebM footage, usually two to
+five minutes per app, plus a poster, the narration text, and chapters in
+`docs/demo/README.md`. That README records the actual setup and rerun commands,
+demonstrated workflows, voices, substitutions, and blockers. Recording scripts live in the project's existing test or script
 structure, separately from ordinary acceptance runs. There is no universal rerun
 command across frameworks.
 
 The skill fixes recording and setup problems. Product repairs require expanded
 user scope. If an app cannot run or be captured, it reports the precise blocker
 and completes independent apps. Existing successful videos survive failed reruns.
+
+## Create narrated videos
+
+Open the consuming repository and invoke:
+
+```text
+$video-creator Create a narrated video that explains how the loan workflow is implemented in this repository.
+```
+
+The [video creator skill](../skills/video-creator/SKILL.md) produces an explainer
+rather than a screen recording. It writes three text files into
+`docs/videos/NN-kebab-topic/`: a `script.md` transcript, a `slides.html` deck
+whose slides are cued to verbatim phrases in the script, and a `README.md`
+outline with objectives, a run sheet, and references. Every path, identifier,
+and quote is checked against the repository. If the repository already has a
+videos folder or video tooling, the skill follows that convention instead.
+
+Narration is synthesized paragraph by paragraph with the free `edge-tts` Python
+package, which needs internet access but no API key, and the measured clip
+durations become a timing manifest. The video builder resolves each slide cue
+against that manifest, screenshots the deck at 1920 × 1080 in headless Chrome or
+Edge, and uses ffmpeg to encode an MP4 with burned-in captions. Install the
+package with `python -m pip install edge-tts` using the interpreter named by
+`PYTHON`; `EDGE_PATH` and `FFMPEG_PATH` point the builder at a browser or
+ffmpeg that is not on `PATH`. Behind a TLS-intercepting proxy, append the proxy
+certificate to Python's `certifi` bundle so `edge-tts` can connect.
+
+The skill expects an audio generator and a video builder under `tools/` in the
+consuming repository and describes both so they can be created when missing.
+When Node, Python, `edge-tts`, a browser, ffmpeg, or internet access is
+unavailable, it still delivers the text files, runs the validation it can, and
+lists the remaining commands rather than fabricating media.
 
 ## Configure diagram rendering
 
@@ -374,6 +421,9 @@ files from surviving an update. Identical installed skills are left in place.
 | A skill is unavailable | Confirm the installed path ends in `<skill-name>/SKILL.md`, check `/skills`, and restart Codex if discovery has not refreshed. Check for disabled entries under `skills.config` in the Codex configuration. |
 | The installer reports a differing destination | Move the existing skill to a backup outside the active skills directory, then rerun with the same destination. |
 | A reference or script is missing | Copy the entire skill directory, including `references/` and `scripts/`. |
+| `edge-tts` fails with a certificate error | A TLS-intercepting proxy is in use. Append its CA certificate to the file printed by `python -c "import certifi; print(certifi.where())"` and retry. |
+| The video builder cannot find a browser | Install Chrome, Edge, or Chromium, or set `EDGE_PATH` (or `CHROME_PATH`) to the executable. |
+| A slide cue is not found or not unique | Copy the `data-cue` text verbatim from `script.md`, keep it unique in the script, and keep slides in narration order. |
 | The agent-file generator reports a missing template | Restore the skill's `assets/` directory. Regeneration from source requires a Primer checkout, as described in the skill. |
 | The agent-file generator reports `Not a directory` | Create the target project directory before running the command. |
 | Agent guidance is truncated | Shorten the description, regenerate, and review the end of `AGENTS.md` for missing guidance. |
