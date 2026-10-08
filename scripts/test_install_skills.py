@@ -35,18 +35,18 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(mtimes, {p: p.stat().st_mtime_ns for p in mtimes})
 
     def test_collision_preflight_preserves_customizations(self):
-        target = self.dest / "software-design-document"
+        target = self.dest / "writing-design-documents"
         target.mkdir(parents=True)
         custom = target / "SKILL.md"
         custom.write_text("custom skill", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "exists and differs"):
             self.install()
         self.assertEqual(custom.read_text(), "custom skill")
-        self.assertFalse((self.dest / "requirements-engineer").exists())
+        self.assertFalse((self.dest / "writing-requirements").exists())
 
     def test_extra_files_are_a_conflict(self):
         self.install()
-        extra = self.dest / "requirements-engineer" / "local-notes.md"
+        extra = self.dest / "writing-requirements" / "local-notes.md"
         extra.write_text("keep me", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "exists and differs"):
             self.install()
@@ -56,7 +56,7 @@ class InstallTests(unittest.TestCase):
         copytree = installer.shutil.copytree
 
         def fail_second(source, target, *args, **kwargs):
-            if Path(source).name == "software-design-document":
+            if Path(source).name == "writing-design-documents":
                 raise OSError("simulated copy failure")
             return copytree(source, target, *args, **kwargs)
 

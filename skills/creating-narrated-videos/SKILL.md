@@ -1,5 +1,5 @@
 ---
-name: video-creator
+name: creating-narrated-videos
 description: >-
   Create a narrated video (slide deck + MP3 narration + captioned 1080p MP4)
   from text files - a transcript script, a timed HTML slide deck and an outline -
@@ -7,10 +7,10 @@ description: >-
   video. Use when asked to make, script, record, regenerate or fix a video,
   tutorial, walkthrough, demo, explainer, training lesson, screencast or slide
   deck for this repository or product. Not for screen recordings of running
-  applications; use demo-video for those.
+  applications; use recording-demo-videos for those.
 ---
 
-# Video creator
+# Creating narrated videos
 
 A video is **narration audio + a slide deck timed to it + captions**, all generated from text files checked into one folder. You author three text files; tooling turns them into media.
 

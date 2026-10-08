@@ -1,5 +1,5 @@
 ---
-name: software-design-document
+name: writing-design-documents
 description: >-
   Create software design documents and architecture write-ups from existing
   L1/L2 requirements in docs/specs/. Use for detailed designs organized by
@@ -7,7 +7,7 @@ description: >-
   C4, class, and sequence diagrams in docs/detailed-designs/.
 ---
 
-# Software design document
+# Writing design documents
 
 This skill turns a set of requirements into a browsable tree of detailed feature
 designs. The output is deterministic in shape, so a reader always knows where to
@@ -49,7 +49,7 @@ Check for a `docs/specs/` folder (relative to the repo root) that contains
 markdown holding **both** L1 and L2 requirements. Detect this by searching the
 markdown for requirement identifiers at both levels. The level token (`L1`/`L2`)
 and the domain appear in **either order**, and a single spec set may **mix** the
-two conventions. Plain numbered IDs from the requirements-engineer skill are
+two conventions. Plain numbered IDs from the writing-requirements skill are
 also valid; a single spec set may mix all three:
 
 - plain: `L1-<n>`, `L2-<n>` — e.g. `L1-001`, `L2-002`

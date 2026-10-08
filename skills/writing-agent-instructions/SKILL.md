@@ -1,9 +1,9 @@
 ---
-name: agent-instruction-files
+name: writing-agent-instructions
 description: Writes the agent instruction files a repository needs so coding agents know how to work in it - AGENTS.md plus the CLAUDE.md, GEMINI.md, and .github/copilot-instructions.md pointers - generated from a description of what the project shall be, for a project that does not exist yet. Use this whenever someone mentions AGENTS.md, CLAUDE.md, GEMINI.md, copilot-instructions, "agent instructions", "agent context files", "coding agent guidance", or asks to set up, scaffold, bootstrap, or initialise the conventions for a new project or repository. Use it too when someone describes a project they are about to start and wants an agent to follow its conventions, even if they never name any of these files - if they are standing at an empty directory describing what they intend to build, this is the skill.
 ---
 
-# Agent instruction files
+# Writing agent instructions
 
 ## What this produces
 
