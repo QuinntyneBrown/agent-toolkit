@@ -1,7 +1,7 @@
 {
   "name": "agent-toolkit",
-  "version": "0.4.0",
-  "description": "Reusable engineering skills for project guidance, requirements, technical design, application demo videos, and narrated explainer videos.",
+  "version": "0.5.0",
+  "description": "Reusable engineering skills for project guidance, requirements, technical design, HTML mocks, design systems, application demo videos, and narrated explainer videos.",
   "author": {
     "name": "QuinntyneBrown",
     "url": "https://github.com/QuinntyneBrown"

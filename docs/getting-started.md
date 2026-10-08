@@ -12,6 +12,7 @@ Codex.
 | Codex CLI or Claude Code with plugin support | Install the plugin and load its skills. If `plugin` is unavailable, update the client. |
 | Python 3.10 or later | Run the local installer; it uses the Python standard library. Python 3 is also needed for the agent-file generator and diagram renderer. |
 | PlantUML and Java | Render the design skill's diagrams using a local PlantUML installation. |
+| Python 3 and, optionally, Playwright with Chromium | Run the mock and design-system checkers (standard library only). Screenshot the mocks at three widths in both themes with the Python `playwright` package or the Playwright CLI (`npx playwright`). |
 | Application runtimes and capture tools | Record demos locally. Browser capture prefers Playwright and Chromium; terminal/native apps need compatible capture and WebM encoding tools. Narration also needs ffmpeg and Python with `edge-tts`. |
 | Node.js, ffmpeg, a Chromium-based browser, and Python with `edge-tts` | Build narrated videos. The audio generator and video builder run on Node, synthesize narration with `edge-tts`, screenshot slides in headless Chrome or Edge, and encode MP4 files with ffmpeg (libx264 and libass). |
 
@@ -45,7 +46,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all five skills
+The first command registers the marketplace; the second installs all seven skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -60,6 +61,8 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:writing-agent-instructions Describe your new project here.
 /agent-toolkit:writing-requirements Define requirements for a library lending system.
 /agent-toolkit:writing-design-documents Create detailed designs from docs/specs/.
+/agent-toolkit:writing-html-mocks Create HTML mocks for every screen and state.
+/agent-toolkit:extracting-design-systems Extract the design system from docs/mocks/.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -176,6 +179,20 @@ my-app/
         │   ├── references/
         │   ├── scripts/
         │   └── evals/
+        ├── writing-html-mocks/
+        │   ├── SKILL.md
+        │   ├── agents/openai.yaml
+        │   ├── assets/
+        │   ├── references/
+        │   ├── scripts/
+        │   └── evals/
+        ├── extracting-design-systems/
+        │   ├── SKILL.md
+        │   ├── agents/openai.yaml
+        │   ├── assets/
+        │   ├── references/
+        │   ├── scripts/
+        │   └── evals/
         └── creating-narrated-videos/
             ├── SKILL.md
             └── agents/openai.yaml
@@ -188,8 +205,8 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/writing-agent-instructions`, `/writing-requirements`,
-`/writing-design-documents`, `/recording-demo-videos`, and
-`/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
+`/writing-design-documents`, `/writing-html-mocks`, `/extracting-design-systems`,
+`/recording-demo-videos`, and `/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
 does not replace `SKILL.md`.
 
 ## Create agent instruction files
@@ -249,6 +266,60 @@ sections, plus PlantUML sources and PNG images in a `diagrams/` directory.
 
 Review the designs against the source requirements. Acceptance tests are written
 during development, using the L2 traceability convention in the requirements skill.
+
+## Create HTML mocks and extract a design system
+
+Open the consuming repository and invoke:
+
+```text
+$writing-html-mocks Create HTML mocks for every page, dialog and notification of this product in every state.
+```
+
+The [writing HTML mocks skill](../skills/writing-html-mocks/SKILL.md) reads
+`docs/specs/`, `docs/detailed-designs/`, routes, and existing templates when they
+exist (none are required), enumerates every page, dialog, and notification plus
+the screens every product needs (sign in, password reset, 404, 403, errors,
+offline, settings), and writes one static HTML file per screen per state to
+`docs/mocks/pages/`, `docs/mocks/dialogs/`, and `docs/mocks/notifications/`.
+Every mock shares `docs/mocks/assets/tokens.css` and `ui.css`, works at 360, 768,
+and 1280 px, switches between light and dark themes, is keyboard accessible, and
+uses real copy. `manifest.json` lists the screens and states; the bundled checker
+regenerates the gallery and coverage matrix and fails on missing states, orphan
+files, unlabelled controls, placeholder text, or broken links:
+
+```sh
+python .agents/skills/writing-html-mocks/scripts/check_mocks.py docs/mocks --write
+python .agents/skills/writing-html-mocks/scripts/screenshot_mocks.py docs/mocks
+```
+
+Screenshots land in `docs/mocks/.cache/` (never committed) and need the Python
+`playwright` package or the Playwright CLI with Chromium. For a plugin
+installation, ask the skill to run its helpers; the client manages the path.
+
+Once the mocks are approved, invoke:
+
+```text
+$extracting-design-systems Extract the design system from docs/mocks into docs/design-system.
+```
+
+The [extracting design systems skill](../skills/extracting-design-systems/SKILL.md)
+stops if `docs/mocks/` is missing. Otherwise it harvests every colour, size,
+spacing, radius, shadow, and duration the mocks use, normalises them into
+`docs/design-system/tokens/tokens.css` (primitive, semantic, and component tiers
+with light and dark themes, reduced-motion, high-contrast, and forced-colours
+overrides), exports a DTCG `tokens.json`, and writes the component CSS, twelve
+foundation pages (colour, typography, spacing, layout with gutters and margins,
+elevation, shape, motion, iconography, theming, responsive, accessibility,
+content), one HTML page per component with anatomy, variants, sizes, every state
+in both themes, responsive rules, theming, WCAG 2.2 AA accessibility notes,
+content rules, do/don't, tokens, code, and source mocks, plus pattern pages. Its
+checkers verify contrast for every declared token pair in both themes and the
+structure of every page:
+
+```sh
+python .agents/skills/extracting-design-systems/scripts/check_contrast.py docs/design-system/tokens/tokens.css
+python .agents/skills/extracting-design-systems/scripts/check_design_system.py docs/design-system
+```
 
 ## Create application demo videos
 
@@ -427,6 +498,10 @@ files from surviving an update. Identical installed skills are left in place.
 | A slide cue is not found or not unique | Copy the `data-cue` text verbatim from `script.md`, keep it unique in the script, and keep slides in narration order. |
 | The agent-file generator reports a missing template | Restore the skill's `assets/` directory. Regeneration from source requires a Primer checkout, as described in the skill. |
 | The agent-file generator reports `Not a directory` | Create the target project directory before running the command. |
+| Design-system skill refuses to run | It extracts from `docs/mocks/`; run `writing-html-mocks` first. |
+| Mock checker reports missing states | Add the state file or declare it under `not_applicable` with a reason in `manifest.json`; never remove required states. |
+| Contrast check fails | Adjust the primitive colour the failing semantic token aliases, keep the token names, and rerun; aim for margin above 4.5:1 and 3:1. |
+| Mock screenshots cannot run | Install the Python `playwright` package or run `npx playwright install chromium`; otherwise review the HTML directly and report the remaining command. |
 | Agent guidance is truncated | Shorten the description, regenerate, and review the end of `AGENTS.md` for missing guidance. |
 | Design generation stops at the requirements gate | Provide both L1 and L2 requirements under `docs/specs/`, with L2 entries tracing to their parent L1. |
 | `PlantUML not found` | Check `PLANTUML_JAR`, the `plantuml` command on `PATH`, or a supported JAR location. |

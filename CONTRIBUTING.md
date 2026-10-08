@@ -71,7 +71,7 @@ The warning that the repository's `CLAUDE.md` is not loaded as plugin context is
 expected: that file is contributor guidance, and the skills supply plugin
 instructions. Validate Codex packaging with the plugin-creator skill's validator
 when available, and test both clients' local marketplace-add and install flows
-in isolated configurations. Confirm all five skills and their supporting files
+in isolated configurations. Confirm all seven skills and their supporting files
 exist in each installed bundle. Publish the manifests on the default branch
 before advertising GitHub installation as tested.
 
@@ -116,6 +116,13 @@ runner is bundled. Inspect the encoded videos and record actual results separate
 from the scenario definitions.
 See the [demo validation record](skills/recording-demo-videos/evals/validation.md) for the
 executed sample and coverage limits.
+
+The mock and design-system skills bundle standard-library Python checkers. After
+changing their scripts or assets, build a disposable sample project from the
+templates and run `check_mocks.py --write`, `harvest_styles.py`,
+`check_contrast.py`, `tokens_to_json.py`, and `check_design_system.py` against
+it; all must exit 0. Review screenshots from `screenshot_mocks.py` in both
+themes when the UI kit or documentation chrome changes.
 
 ## Pull requests
 
