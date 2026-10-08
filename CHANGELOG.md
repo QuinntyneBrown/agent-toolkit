@@ -7,6 +7,28 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- HTML mocks skill (`writing-html-mocks`): one static, responsive, themed,
+  keyboard-accessible HTML file per page, dialog, and notification in every
+  state under `docs/mocks/`, with a starter token file and component kit, mock
+  chrome, page/dialog/notification templates, a screen inventory and state
+  matrix, UX quality principles, a manifest-driven coverage checker that
+  generates the gallery and coverage matrix, a Playwright screenshot helper,
+  Codex UI metadata, and evaluation scenarios.
+- Design system skill (`extracting-design-systems`): extracts design tokens
+  (primitive, semantic, and component tiers with light and dark themes and
+  reduced-motion, high-contrast, and forced-colours overrides), foundation
+  pages, one documented HTML page per component (anatomy, variants, sizes,
+  every state in both themes, responsive behaviour, theming, WCAG 2.2 AA
+  accessibility, content, do/don't, tokens, code, source mocks), and pattern
+  pages from `docs/mocks/` into `docs/design-system/`, with a style harvester,
+  a WCAG contrast checker covering 108 token pairs in the starter palette, a
+  DTCG `tokens.json` exporter, a structure checker that rejects raw colours and
+  missing sections, documentation-site chrome with live token values and
+  contrast ratios, a complete example component page, Codex UI metadata, and
+  evaluation scenarios.
+- Advanced both plugin manifests to `0.5.0` and expanded the catalog, quick
+  start, getting-started guide, troubleshooting table, and contribution checks
+  to cover all seven skills.
 - Video creator skill for narrated slide-deck videos: a transcript, a cued
   HTML slide deck, and an outline in `docs/videos/`, synthesized with free
   `edge-tts` narration and encoded as a captioned 1080p MP4 with headless

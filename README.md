@@ -1,6 +1,6 @@
 # Agent Toolkit
 
-**Reusable agent skills for project guidance, requirements, design, demo videos, and narrated videos.**
+**Reusable agent skills for project guidance, requirements, design, HTML mocks, design systems, demo videos, and narrated videos.**
 
 Agent Toolkit packages engineering workflows as version-controlled instructions,
 references, and helper scripts. Use the skills across projects to establish coding
@@ -23,6 +23,12 @@ that trace back to testable requirements.
   with a shared writing style and explicit links to source requirements.
 - **Diagrams alongside the design.** Author C4, class, and sequence diagrams in
   PlantUML and render PNG images for inline viewing on GitHub.
+- **Clickable HTML mocks.** Write one static HTML file per page, dialog, and
+  notification in every state, responsive, themed, and accessible, with a
+  coverage matrix and gallery.
+- **Extracted design systems.** Turn the mocks into design tokens with light and
+  dark themes, foundation pages, and one documented HTML page per component with
+  verified WCAG contrast.
 - **Portable skill folders.** Keep each skill's instructions and supporting
   resources together so they can be copied into a consuming project.
 - **Verified application demos.** Discover runnable applications and record
@@ -37,11 +43,17 @@ that trace back to testable requirements.
 | [Writing agent instructions](skills/writing-agent-instructions/SKILL.md) | Establish guidance for a new .NET CLI or Angular/.NET web project from its description. | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.github/copilot-instructions.md` |
 | [Writing requirements](skills/writing-requirements/SKILL.md) | Create and maintain L1/L2 requirements, acceptance criteria, and test traceability. | `docs/specs/L1.md` and `docs/specs/L2.md` |
 | [Writing design documents](skills/writing-design-documents/SKILL.md) | Develop feature designs from existing requirements, including components and rendered diagrams. | `docs/detailed-designs/{subsystem}/{feature}/` |
+| [Writing HTML mocks](skills/writing-html-mocks/SKILL.md) | Mock every page, dialog, and notification in every state as static, responsive, themed, accessible HTML before frontend work starts. | `docs/mocks/` with `manifest.json`, shared assets, a gallery, and a coverage matrix |
+| [Extracting design systems](skills/extracting-design-systems/SKILL.md) | Extract tokens, foundations, patterns, and one documented page per component from the mocks, with contrast verified for both themes. | `docs/design-system/` with `tokens/`, `foundations/`, `components/`, and `patterns/` |
 | [Recording demo videos](skills/recording-demo-videos/SKILL.md) | Understand and run executable applications, then record verified, voice-narrated walkthroughs of each. | `docs/demo/` videos, posters, narration text, and a README; recording scripts in the project's test or script structure |
 | [Creating narrated videos](skills/creating-narrated-videos/SKILL.md) | Script, build, and verify a narrated slide-deck video about the repository or product. | `docs/videos/NN-topic/` with `script.md`, `slides.html`, `README.md`, an MP3, and a captioned MP4 |
 
 The design skill requires existing L1 and L2 requirements under `docs/specs/`.
 The requirements skill establishes the acceptance criteria used during development.
+The mock skill uses specs and designs when they exist but does not require them;
+the design-system skill requires `docs/mocks/` and extracts everything from it.
+Both ship Python helpers that need only the standard library; screenshots use
+Playwright with Chromium when available.
 The demo skill requires locally runnable applications; specifications and designs
 are useful inputs but are optional. Both video skills narrate with the free
 `edge-tts` package and the same two voices. The narrated video skill records
@@ -53,6 +65,8 @@ flowchart LR
     L1["L1: High-level requirements"] --> L2["L2: Detailed requirements"]
     L2 --> Design["Feature designs and diagrams"]
     L2 --> Tests["Acceptance tests during development"]
+    L2 --> Mocks["HTML mocks: every screen, every state"]
+    Mocks --> DS["Design system: tokens and components"]
 ```
 
 ## Quick start
@@ -83,7 +97,7 @@ Or run the equivalent commands inside Claude Code:
 ```
 
 For either client, the first command registers the marketplace and the second
-installs one plugin containing all five skills. Terminal commands default to
+installs one plugin containing all seven skills. Terminal commands default to
 user scope; choose user scope if Claude's interactive installer asks. Start a
 new session in your consuming project after installation. GitHub installation
 requires the marketplace files to be published on this repository's default branch.
@@ -111,13 +125,20 @@ updates, local checkout testing, and switching from manually copied skills.
    $writing-design-documents Create detailed feature designs from docs/specs/, including rendered diagrams.
    ```
 
-4. When the applications run locally, create their demonstrations:
+4. Before frontend work, mock every screen and state, then extract the design system:
+
+   ```text
+   $writing-html-mocks Create HTML mocks for every page, dialog and notification of the library lending system in every state.
+   $extracting-design-systems Extract the design system from docs/mocks into docs/design-system.
+   ```
+
+5. When the applications run locally, create their demonstrations:
 
    ```text
    $recording-demo-videos Understand this repository and create a narrated, captioned demo video for each executable application in docs/demo/.
    ```
 
-5. To explain a topic with narrated slides instead of a screen recording:
+6. To explain a topic with narrated slides instead of a screen recording:
 
    ```text
    $creating-narrated-videos Create a narrated video that explains how the loan workflow is implemented in this repository.
@@ -133,6 +154,8 @@ plugin skills with their namespace:
 /agent-toolkit:writing-agent-instructions Describe your new project here.
 /agent-toolkit:writing-requirements Define requirements for a library lending system.
 /agent-toolkit:writing-design-documents Create detailed designs from docs/specs/.
+/agent-toolkit:writing-html-mocks Create HTML mocks for every screen and state.
+/agent-toolkit:extracting-design-systems Extract the design system from docs/mocks/.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -154,7 +177,8 @@ Choose either plugin installation or standalone copies to avoid duplicate skills
 Python is not required to install the plugin.
 
 Agent-file generation requires Python 3. Diagram rendering additionally requires
-PlantUML and Java when using a PlantUML JAR.
+PlantUML and Java when using a PlantUML JAR. The mock and design-system checkers
+need only Python 3; mock screenshots need Playwright with Chromium.
 See [diagram setup](docs/getting-started.md#configure-diagram-rendering) for
 configuration and platform dependencies.
 Demo recording needs the application's own runtimes, a suitable capture tool,
@@ -199,6 +223,20 @@ agent-toolkit/
 │   ├── writing-design-documents/
 │   │   ├── SKILL.md
 │   │   ├── agents/openai.yaml
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   └── evals/
+│   ├── writing-html-mocks/
+│   │   ├── SKILL.md
+│   │   ├── agents/openai.yaml
+│   │   ├── assets/
+│   │   ├── references/
+│   │   ├── scripts/
+│   │   └── evals/
+│   ├── extracting-design-systems/
+│   │   ├── SKILL.md
+│   │   ├── agents/openai.yaml
+│   │   ├── assets/
 │   │   ├── references/
 │   │   ├── scripts/
 │   │   └── evals/
