@@ -34,17 +34,17 @@ that trace back to testable requirements.
 
 | Skill | Use it to | Output in the consuming project |
 | --- | --- | --- |
-| [Agent instruction files](skills/agent-instruction-files/SKILL.md) | Establish guidance for a new .NET CLI or Angular/.NET web project from its description. | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.github/copilot-instructions.md` |
-| [Requirements engineer](skills/requirements-engineer/SKILL.md) | Create and maintain L1/L2 requirements, acceptance criteria, and test traceability. | `docs/specs/L1.md` and `docs/specs/L2.md` |
-| [Software design document](skills/software-design-document/SKILL.md) | Develop feature designs from existing requirements, including components and rendered diagrams. | `docs/detailed-designs/{subsystem}/{feature}/` |
-| [Demo video](skills/demo-video/SKILL.md) | Understand and run executable applications, then record verified, voice-narrated walkthroughs of each. | `docs/demo/` videos, posters, narration text, and a README; recording scripts in the project's test or script structure |
-| [Video creator](skills/video-creator/SKILL.md) | Script, build, and verify a narrated slide-deck video about the repository or product. | `docs/videos/NN-topic/` with `script.md`, `slides.html`, `README.md`, an MP3, and a captioned MP4 |
+| [Writing agent instructions](skills/writing-agent-instructions/SKILL.md) | Establish guidance for a new .NET CLI or Angular/.NET web project from its description. | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `.github/copilot-instructions.md` |
+| [Writing requirements](skills/writing-requirements/SKILL.md) | Create and maintain L1/L2 requirements, acceptance criteria, and test traceability. | `docs/specs/L1.md` and `docs/specs/L2.md` |
+| [Writing design documents](skills/writing-design-documents/SKILL.md) | Develop feature designs from existing requirements, including components and rendered diagrams. | `docs/detailed-designs/{subsystem}/{feature}/` |
+| [Recording demo videos](skills/recording-demo-videos/SKILL.md) | Understand and run executable applications, then record verified, voice-narrated walkthroughs of each. | `docs/demo/` videos, posters, narration text, and a README; recording scripts in the project's test or script structure |
+| [Creating narrated videos](skills/creating-narrated-videos/SKILL.md) | Script, build, and verify a narrated slide-deck video about the repository or product. | `docs/videos/NN-topic/` with `script.md`, `slides.html`, `README.md`, an MP3, and a captioned MP4 |
 
 The design skill requires existing L1 and L2 requirements under `docs/specs/`.
 The requirements skill establishes the acceptance criteria used during development.
 The demo skill requires locally runnable applications; specifications and designs
 are useful inputs but are optional. Both video skills narrate with the free
-`edge-tts` package and the same two voices. The video creator skill records
+`edge-tts` package and the same two voices. The narrated video skill records
 nothing on screen: it explains a topic with narrated slides generated from text
 files, so it needs ffmpeg, a Chromium-based browser, and Python with `edge-tts`.
 
@@ -96,31 +96,31 @@ updates, local checkout testing, and switching from manually copied skills.
 1. Open Codex in the consuming project. For a new project, establish its agent guidance:
 
    ```text
-   $agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
+   $writing-agent-instructions This is a new library lending web application with an Angular frontend and a .NET API.
    ```
 
 2. Define the requirements:
 
    ```text
-   $requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
+   $writing-requirements Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
    ```
 
 3. Once the L1/L2 requirements are ready, invoke the design skill:
 
    ```text
-   $software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
+   $writing-design-documents Create detailed feature designs from docs/specs/, including rendered diagrams.
    ```
 
 4. When the applications run locally, create their demonstrations:
 
    ```text
-   $demo-video Understand this repository and create a narrated, captioned demo video for each executable application in docs/demo/.
+   $recording-demo-videos Understand this repository and create a narrated, captioned demo video for each executable application in docs/demo/.
    ```
 
 5. To explain a topic with narrated slides instead of a screen recording:
 
    ```text
-   $video-creator Create a narrated video that explains how the loan workflow is implemented in this repository.
+   $creating-narrated-videos Create a narrated video that explains how the loan workflow is implemented in this repository.
    ```
 
 Codex supports explicit skill mentions and automatic selection from descriptions.
@@ -130,11 +130,11 @@ entries may display the `agent-toolkit:` namespace. In Claude Code, invoke the
 plugin skills with their namespace:
 
 ```text
-/agent-toolkit:agent-instruction-files Describe your new project here.
-/agent-toolkit:requirements-engineer Define requirements for a library lending system.
-/agent-toolkit:software-design-document Create detailed designs from docs/specs/.
-/agent-toolkit:demo-video Create a demo video for each executable application.
-/agent-toolkit:video-creator Create a narrated video that explains the loan workflow.
+/agent-toolkit:writing-agent-instructions Describe your new project here.
+/agent-toolkit:writing-requirements Define requirements for a library lending system.
+/agent-toolkit:writing-design-documents Create detailed designs from docs/specs/.
+/agent-toolkit:recording-demo-videos Create a demo video for each executable application.
+/agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
 
 ### Alternative: install standalone skills
@@ -184,25 +184,25 @@ agent-toolkit/
 │   ├── marketplace.json
 │   └── plugin.json
 ├── skills/
-│   ├── agent-instruction-files/
+│   ├── writing-agent-instructions/
 │   │   ├── SKILL.md
 │   │   ├── assets/
 │   │   └── scripts/
-│   ├── requirements-engineer/
+│   ├── writing-requirements/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
-│   ├── demo-video/
+│   ├── recording-demo-videos/
 │   │   ├── SKILL.md
 │   │   ├── agents/openai.yaml
 │   │   ├── references/
 │   │   └── evals/
-│   ├── software-design-document/
+│   ├── writing-design-documents/
 │   │   ├── SKILL.md
 │   │   ├── agents/openai.yaml
 │   │   ├── references/
 │   │   ├── scripts/
 │   │   └── evals/
-│   └── video-creator/
+│   └── creating-narrated-videos/
 │       ├── SKILL.md
 │       └── agents/openai.yaml
 ├── docs/

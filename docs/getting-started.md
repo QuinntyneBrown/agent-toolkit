@@ -57,11 +57,11 @@ In Codex, type `$` and select a skill from Agent Toolkit. Plugin entries may sho
 the `agent-toolkit:` namespace. In Claude Code, use:
 
 ```text
-/agent-toolkit:agent-instruction-files Describe your new project here.
-/agent-toolkit:requirements-engineer Define requirements for a library lending system.
-/agent-toolkit:software-design-document Create detailed designs from docs/specs/.
-/agent-toolkit:demo-video Create a demo video for each executable application.
-/agent-toolkit:video-creator Create a narrated video that explains the loan workflow.
+/agent-toolkit:writing-agent-instructions Describe your new project here.
+/agent-toolkit:writing-requirements Define requirements for a library lending system.
+/agent-toolkit:writing-design-documents Create detailed designs from docs/specs/.
+/agent-toolkit:recording-demo-videos Create a demo video for each executable application.
+/agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
 
 Both plugins use the same `skills/` tree, including all templates, references,
@@ -158,25 +158,25 @@ The installed project structure is:
 my-app/
 └── .agents/
     └── skills/
-        ├── agent-instruction-files/
+        ├── writing-agent-instructions/
         │   ├── SKILL.md
         │   ├── assets/
         │   └── scripts/
-        ├── requirements-engineer/
+        ├── writing-requirements/
         │   ├── SKILL.md
         │   └── agents/openai.yaml
-        ├── demo-video/
+        ├── recording-demo-videos/
         │   ├── SKILL.md
         │   ├── agents/openai.yaml
         │   ├── references/
         │   └── evals/
-        ├── software-design-document/
+        ├── writing-design-documents/
         │   ├── SKILL.md
         │   ├── agents/openai.yaml
         │   ├── references/
         │   ├── scripts/
         │   └── evals/
-        └── video-creator/
+        └── creating-narrated-videos/
             ├── SKILL.md
             └── agents/openai.yaml
 ```
@@ -187,13 +187,14 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 ### Standalone Claude Code skills
 
 The same complete folders can be copied into `<project>/.claude/skills/` or
-`~/.claude/skills/`. Use `/agent-instruction-files`, `/requirements-engineer`,
-`/software-design-document`, `/demo-video`, and `/video-creator` there. Codex-specific
-`agents/openai.yaml` metadata does not replace `SKILL.md`.
+`~/.claude/skills/`. Use `/writing-agent-instructions`, `/writing-requirements`,
+`/writing-design-documents`, `/recording-demo-videos`, and
+`/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
+does not replace `SKILL.md`.
 
 ## Create agent instruction files
 
-The [agent instruction files skill](../skills/agent-instruction-files/SKILL.md)
+The [writing agent instructions skill](../skills/writing-agent-instructions/SKILL.md)
 uses a project description to generate guidance before implementation begins.
 Its templates prescribe .NET CLI conventions or Angular/.NET web conventions.
 It does not infer guidance from an existing codebase.
@@ -201,7 +202,7 @@ It does not infer guidance from an existing codebase.
 Open Codex in the new project directory and invoke:
 
 ```text
-$agent-instruction-files This is a new library lending web application with an Angular frontend and a .NET API.
+$writing-agent-instructions This is a new library lending web application with an Angular frontend and a .NET API.
 ```
 
 The skill writes `AGENTS.md` and pointer files for Claude, Gemini, and Copilot.
@@ -211,7 +212,7 @@ The generator can also be run directly with Python, without installing the Prime
 .NET tool. From the toolkit checkout, use an existing target directory:
 
 ```sh
-python skills/agent-instruction-files/scripts/render.py --path /path/to/new-project --archetype cli --prompt "A .NET command-line tool that validates CSV files."
+python skills/writing-agent-instructions/scripts/render.py --path /path/to/new-project --archetype cli --prompt "A .NET command-line tool that validates CSV files."
 ```
 
 Replace the target path for the local system. Use `--archetype web` for the web
@@ -229,7 +230,7 @@ to 150 lines and reports when a long description causes truncation.
 Start Codex from the consuming project's root. Invoke:
 
 ```text
-$requirements-engineer Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
+$writing-requirements Define the requirements for a library lending system with a catalog, member accounts, loans, and returns.
 ```
 
 Review the L1 capabilities and L2 behaviors, including their acceptance criteria.
@@ -239,7 +240,7 @@ requirement IDs when updating a specification.
 Once both levels are present, invoke:
 
 ```text
-$software-design-document Create detailed feature designs from docs/specs/, including rendered diagrams.
+$writing-design-documents Create detailed feature designs from docs/specs/, including rendered diagrams.
 ```
 
 The design skill organizes the output by subsystem and feature. Each feature
@@ -254,10 +255,10 @@ during development, using the L2 traceability convention in the requirements ski
 Open the consuming repository and invoke:
 
 ```text
-$demo-video Understand this repository and create a narrated, captioned demo video for each executable application in docs/demo/.
+$recording-demo-videos Understand this repository and create a narrated, captioned demo video for each executable application in docs/demo/.
 ```
 
-The [demo video skill](../skills/demo-video/SKILL.md) reads source, tests, startup
+The [recording demo videos skill](../skills/recording-demo-videos/SKILL.md) reads source, tests, startup
 scripts, and any existing specifications or detailed designs. It discovers web
 apps, CLIs, APIs, workers, and native apps, then records real local workflows with
 assertions. Missing `docs/specs/` or `docs/detailed-designs/` does not block it.
@@ -273,7 +274,7 @@ assume Playwright's encoder includes ffprobe or MP4 support.
 
 Every demo is voice-narrated. The skill writes the narration as short paragraphs
 per chapter, synthesizes them with the free `edge-tts` package using the same
-voices as the video creator skill (`en-US-AndrewMultilingualNeural` for the
+voices as the narrated video skill (`en-US-AndrewMultilingualNeural` for the
 narrator and `en-US-AvaMultilingualNeural` for a second speaker; `EDGE_VOICE`
 and `EDGE_VOICE_2` override them), holds each caption for at least its clip's
 length, and muxes the assembled Opus track into the WebM after capture. If
@@ -297,10 +298,10 @@ and completes independent apps. Existing successful videos survive failed reruns
 Open the consuming repository and invoke:
 
 ```text
-$video-creator Create a narrated video that explains how the loan workflow is implemented in this repository.
+$creating-narrated-videos Create a narrated video that explains how the loan workflow is implemented in this repository.
 ```
 
-The [video creator skill](../skills/video-creator/SKILL.md) produces an explainer
+The [creating narrated videos skill](../skills/creating-narrated-videos/SKILL.md) produces an explainer
 rather than a screen recording. It writes three text files into
 `docs/videos/NN-kebab-topic/`: a `script.md` transcript, a `slides.html` deck
 whose slides are cued to verbatim phrases in the script, and a `README.md`
@@ -336,7 +337,7 @@ The bundled renderer searches in this order:
 1. A JAR file identified by `PLANTUML_JAR`.
 2. The `plantuml` command on `PATH`.
 3. The common JAR locations listed in
-   [render_puml.py](../skills/software-design-document/scripts/render_puml.py).
+   [render_puml.py](../skills/writing-design-documents/scripts/render_puml.py).
 
 For a JAR installation, set its path for the current terminal session:
 
@@ -357,16 +358,16 @@ bundled helper; the client manages its installation path. The direct commands
 below apply to standalone installations.
 
 ```sh
-python .agents/skills/software-design-document/scripts/render_puml.py docs/detailed-designs
+python .agents/skills/writing-design-documents/scripts/render_puml.py docs/detailed-designs
 ```
 
 Use `python3` if that is the Python 3 executable on the system. For a personal
 installation, replace the script path with the installed copy under
-`~/.codex/skills/software-design-document/scripts/` (or the chosen installation
+`~/.codex/skills/writing-design-documents/scripts/` (or the chosen installation
 destination). For example, with the default personal installation in PowerShell:
 
 ```powershell
-python "$env:USERPROFILE/.codex/skills/software-design-document/scripts/render_puml.py" docs/detailed-designs
+python "$env:USERPROFILE/.codex/skills/writing-design-documents/scripts/render_puml.py" docs/detailed-designs
 ```
 
 Inspect the output images and confirm that every design's relative image links

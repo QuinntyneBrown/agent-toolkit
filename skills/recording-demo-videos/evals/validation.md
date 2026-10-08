@@ -39,7 +39,7 @@ survived both failed runs, and owned recorded-application processes were stopped
 ## Changes since this record
 
 The narration requirement (synthesized edge-tts voice track using the
-video-creator voices, muxed into the WebM) was added after this validation. The
+creating-narrated-videos voices, muxed into the WebM) was added after this validation. The
 sample recordings described above were silent; narration synthesis, clip
 timing, and the audio mux have not been exercised in a sample project yet.
 

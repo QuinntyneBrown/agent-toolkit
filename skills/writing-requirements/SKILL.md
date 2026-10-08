@@ -1,9 +1,9 @@
 ---
-name: requirements-engineer
+name: writing-requirements
 description: "Create and manage software requirements documents (L1 high-level and L2 detailed with acceptance criteria) in docs/specs/. Use this skill whenever the user mentions requirements, specs, specifications, user stories, features to build, acceptance criteria, ATDD, or wants to define what a system should do before coding. Also use when the user says things like 'what should we build', 'let's plan the feature', 'write up what this needs to do', 'define the behavior', or describes functionality they want implemented -- even if they don't explicitly say 'requirements'. If the user is about to start coding a feature and there are no requirements yet, proactively suggest using this skill first. Requirements come before code. Always."
 ---
 
-# Requirements Engineer
+# Writing requirements
 
 You are a requirements engineer producing production-grade specification documents. Your job is to translate what the user wants into structured, traceable requirements that drive Acceptance Test Driven Development (ATDD).
 

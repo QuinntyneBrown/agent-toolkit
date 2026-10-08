@@ -32,7 +32,7 @@ Write portable paths and state external tool dependencies. Keep rules specific
 to a consuming project in that project's `AGENTS.md`.
 
 The agent instruction skill's templates are exported from Primer. Follow its
-[template maintenance instructions](skills/agent-instruction-files/SKILL.md#where-the-guidance-comes-from)
+[template maintenance instructions](skills/writing-agent-instructions/SKILL.md#where-the-guidance-comes-from)
 to regenerate them in a Primer checkout and copy the exports here. Keep the
 bundled assets aligned with that source.
 
@@ -104,17 +104,17 @@ When changing installation behavior, run the isolated installer tests:
 python -B scripts/test_install_skills.py
 ```
 
-The design skill's [evaluation scenarios](skills/software-design-document/evals/evals.json)
+The design skill's [evaluation scenarios](skills/writing-design-documents/evals/evals.json)
 describe expected behaviors. Their named fixture projects were not included in
 the original import, and the repository has no bundled evaluation runner. Use
 appropriate sample projects and state which scenarios were actually exercised.
 
-The demo skill's [evaluation scenarios](skills/demo-video/evals/evals.json) cover
+The demo skill's [evaluation scenarios](skills/recording-demo-videos/evals/evals.json) cover
 application discovery, real recordings, failure handling, and resource ownership.
 Create the described fixtures in disposable sample projects; no agent evaluation
 runner is bundled. Inspect the encoded videos and record actual results separately
 from the scenario definitions.
-See the [demo validation record](skills/demo-video/evals/validation.md) for the
+See the [demo validation record](skills/recording-demo-videos/evals/validation.md) for the
 executed sample and coverage limits.
 
 ## Pull requests

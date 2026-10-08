@@ -1,5 +1,5 @@
 ---
-name: demo-video
+name: recording-demo-videos
 description: >-
   Create or refresh demo videos of a repository's executable applications.
   Use when asked to record application demos, product walkthroughs, or a video
@@ -10,7 +10,7 @@ description: >-
   or video editing unrelated to running software.
 ---
 
-# Demo video
+# Recording demo videos
 
 Create a watchable demonstration of each executable application: real execution,
 spoken narration, readable captions, and verified outcomes. The default is one
@@ -107,7 +107,7 @@ Synthesize the voice track with the free `edge-tts` Python package (Microsoft
 Edge online read-aloud; no API key, Azure subscription, or paid Speech service).
 Install it with `python -m pip install edge-tts` using the interpreter named by
 `PYTHON`, and check connectivity with `python -m edge_tts --list-voices`. Use
-the same voices as the video-creator skill: `en-US-AndrewMultilingualNeural`
+the same voices as the creating-narrated-videos skill: `en-US-AndrewMultilingualNeural`
 for the narrator and `en-US-AvaMultilingualNeural` for a second speaker such as
 a labelled customer or administrator; `EDGE_VOICE` and `EDGE_VOICE_2` override
 them. Use one voice set across every application in the same demo index.

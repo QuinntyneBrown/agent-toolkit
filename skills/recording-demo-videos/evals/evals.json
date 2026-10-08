@@ -1,5 +1,5 @@
 {
-  "skill_name": "demo-video",
+  "skill_name": "recording-demo-videos",
   "execution": "Run these scenarios in disposable sample repositories with local synthetic data. Create the fixtures described by each setup; fixtures and an automated agent runner are not bundled. Inspect actual artifacts and record which scenarios were exercised. Do not treat this scenario list as passing test results.",
   "evals": [
     {

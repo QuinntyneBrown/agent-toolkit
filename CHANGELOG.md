@@ -32,6 +32,22 @@ under **Unreleased** until a release is published.
 
 ### Changed
 
+- Renamed all five skills to consistent gerund-form names following the
+  [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices#naming-conventions),
+  and advanced both plugin manifests to `0.4.0`. Folder names, frontmatter
+  names, Codex display names, example prompts, evaluation metadata, and
+  documentation were updated together. Standalone installs under the old
+  folder names should be removed before reinstalling; plugin installs pick up
+  the new names on upgrade. Invoke the skills by their new names:
+
+  | Previous name | New name |
+  | --- | --- |
+  | `agent-instruction-files` | `writing-agent-instructions` |
+  | `requirements-engineer` | `writing-requirements` |
+  | `software-design-document` | `writing-design-documents` |
+  | `demo-video` | `recording-demo-videos` |
+  | `video-creator` | `creating-narrated-videos` |
+
 - The demo video skill now requires edge-tts voice narration using the same
   narrator and second-speaker voices as the video creator skill, synthesized
   before capture, timed to the captions, and muxed into the WebM as an Opus
