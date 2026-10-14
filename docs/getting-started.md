@@ -46,7 +46,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all seven skills
+The first command registers the marketplace; the second installs all eight skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -63,6 +63,7 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:writing-design-documents Create detailed designs from docs/specs/.
 /agent-toolkit:writing-html-mocks Create HTML mocks for every screen and state.
 /agent-toolkit:extracting-design-systems Extract the design system from docs/mocks/.
+/agent-toolkit:writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -193,6 +194,9 @@ my-app/
         │   ├── references/
         │   ├── scripts/
         │   └── evals/
+        ├── writing-screen-composition/
+        │   ├── SKILL.md
+        │   └── agents/openai.yaml
         └── creating-narrated-videos/
             ├── SKILL.md
             └── agents/openai.yaml
@@ -206,6 +210,7 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/writing-agent-instructions`, `/writing-requirements`,
 `/writing-design-documents`, `/writing-html-mocks`, `/extracting-design-systems`,
+`/writing-screen-composition`,
 `/recording-demo-videos`, and `/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
 does not replace `SKILL.md`.
 
@@ -320,6 +325,22 @@ structure of every page:
 python .agents/skills/extracting-design-systems/scripts/check_contrast.py docs/design-system/tokens/tokens.css
 python .agents/skills/extracting-design-systems/scripts/check_design_system.py docs/design-system
 ```
+
+## Map screens to a component library
+
+When the application will be built from a component library, invoke:
+
+```text
+$writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library catalogue.
+```
+
+The [writing screen composition skill](../skills/writing-screen-composition/SKILL.md)
+stops if `docs/mocks/` or the component catalogue is missing. Otherwise it
+itemizes every page, dialog, notification, and shell part in the mocks, lists
+the library components each shall be composed of and the UI to build locally,
+verifies coverage against the mock folders, and ensures `AGENTS.md` has the
+"Components library is mandatory (CRITICAL)" section. It writes documentation
+only.
 
 ## Create application demo videos
 

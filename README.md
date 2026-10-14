@@ -45,6 +45,7 @@ that trace back to testable requirements.
 | [Writing design documents](skills/writing-design-documents/SKILL.md) | Develop feature designs from existing requirements, including components and rendered diagrams. | `docs/detailed-designs/{subsystem}/{feature}/` |
 | [Writing HTML mocks](skills/writing-html-mocks/SKILL.md) | Mock every page, dialog, and notification in every state as static, responsive, themed, accessible HTML before frontend work starts. | `docs/mocks/` with `manifest.json`, shared assets, a gallery, and a coverage matrix |
 | [Extracting design systems](skills/extracting-design-systems/SKILL.md) | Extract tokens, foundations, patterns, and one documented page per component from the mocks, with contrast verified for both themes. | `docs/design-system/` with `tokens/`, `foundations/`, `components/`, and `patterns/` |
+| [Writing screen composition](skills/writing-screen-composition/SKILL.md) | Map every page, dialog, notification, and shell part in the mocks to the component-library components that build it, and to the UI that must be built locally. | `docs/screen-composition.md`, plus the "Components library is mandatory" section in `AGENTS.md` |
 | [Recording demo videos](skills/recording-demo-videos/SKILL.md) | Understand and run executable applications, then record verified, voice-narrated walkthroughs of each. | `docs/demo/` videos, posters, narration text, and a README; recording scripts in the project's test or script structure |
 | [Creating narrated videos](skills/creating-narrated-videos/SKILL.md) | Script, build, and verify a narrated slide-deck video about the repository or product. | `docs/videos/NN-topic/` with `script.md`, `slides.html`, `README.md`, an MP3, and a captioned MP4 |
 
@@ -52,6 +53,8 @@ The design skill requires existing L1 and L2 requirements under `docs/specs/`.
 The requirements skill establishes the acceptance criteria used during development.
 The mock skill uses specs and designs when they exist but does not require them;
 the design-system skill requires `docs/mocks/` and extracts everything from it.
+The screen composition skill requires `docs/mocks/` and a component library
+catalogue; it writes documentation only.
 Both ship Python helpers that need only the standard library; screenshots use
 Playwright with Chromium when available.
 The demo skill requires locally runnable applications; specifications and designs
@@ -67,6 +70,7 @@ flowchart LR
     L2 --> Tests["Acceptance tests during development"]
     L2 --> Mocks["HTML mocks: every screen, every state"]
     Mocks --> DS["Design system: tokens and components"]
+    Mocks --> Comp["Screen composition: library vs local UI"]
 ```
 
 ## Quick start
@@ -97,7 +101,7 @@ Or run the equivalent commands inside Claude Code:
 ```
 
 For either client, the first command registers the marketplace and the second
-installs one plugin containing all seven skills. Terminal commands default to
+installs one plugin containing all eight skills. Terminal commands default to
 user scope; choose user scope if Claude's interactive installer asks. Start a
 new session in your consuming project after installation. GitHub installation
 requires the marketplace files to be published on this repository's default branch.
@@ -132,6 +136,12 @@ updates, local checkout testing, and switching from manually copied skills.
    $extracting-design-systems Extract the design system from docs/mocks into docs/design-system.
    ```
 
+   If the application will be built from a component library, map each screen to it:
+
+   ```text
+   $writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library catalogue.
+   ```
+
 5. When the applications run locally, create their demonstrations:
 
    ```text
@@ -156,6 +166,7 @@ plugin skills with their namespace:
 /agent-toolkit:writing-design-documents Create detailed designs from docs/specs/.
 /agent-toolkit:writing-html-mocks Create HTML mocks for every screen and state.
 /agent-toolkit:extracting-design-systems Extract the design system from docs/mocks/.
+/agent-toolkit:writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -240,6 +251,9 @@ agent-toolkit/
 │   │   ├── references/
 │   │   ├── scripts/
 │   │   └── evals/
+│   ├── writing-screen-composition/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── creating-narrated-videos/
 │       ├── SKILL.md
 │       └── agents/openai.yaml
