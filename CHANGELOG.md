@@ -7,6 +7,13 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- Screen composition skill (`writing-screen-composition`): maps every page,
+  dialog, notification, and shell part in `docs/mocks/` to the component-library
+  components that build it and the UI to build locally, writes
+  `docs/screen-composition.md`, verifies coverage, and ensures `AGENTS.md` has
+  the "Components library is mandatory (CRITICAL)" section, with Codex UI
+  metadata. Advanced both plugin manifests to `0.6.0` and updated the catalog,
+  getting-started guide, and manifest descriptions to cover all eight skills.
 - HTML mocks skill (`writing-html-mocks`): one static, responsive, themed,
   keyboard-accessible HTML file per page, dialog, and notification in every
   state under `docs/mocks/`, with a starter token file and component kit, mock
