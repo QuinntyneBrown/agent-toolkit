@@ -46,7 +46,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all eight skills
+The first command registers the marketplace; the second installs all nine skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -64,6 +64,7 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:writing-html-mocks Create HTML mocks for every screen and state.
 /agent-toolkit:extracting-design-systems Extract the design system from docs/mocks/.
 /agent-toolkit:writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library.
+/agent-toolkit:estimating-designs Estimate effort and percent complete for docs/detailed-designs/.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -197,6 +198,12 @@ my-app/
         ├── writing-screen-composition/
         │   ├── SKILL.md
         │   └── agents/openai.yaml
+        ├── estimating-designs/
+        │   ├── SKILL.md
+        │   ├── agents/openai.yaml
+        │   ├── references/
+        │   ├── scripts/
+        │   └── evals/
         └── creating-narrated-videos/
             ├── SKILL.md
             └── agents/openai.yaml
@@ -210,7 +217,7 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/writing-agent-instructions`, `/writing-requirements`,
 `/writing-design-documents`, `/writing-html-mocks`, `/extracting-design-systems`,
-`/writing-screen-composition`,
+`/writing-screen-composition`, `/estimating-designs`,
 `/recording-demo-videos`, and `/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
 does not replace `SKILL.md`.
 
@@ -341,6 +348,29 @@ the library components each shall be composed of and the UI to build locally,
 verifies coverage against the mock folders, and ensures `AGENTS.md` has the
 "Components library is mandatory (CRITICAL)" section. It writes documentation
 only.
+
+## Estimate designs and track progress
+
+Once `docs/detailed-designs/` exists, invoke:
+
+```text
+$estimating-designs Create docs/estimates/ with effort, percent complete and a roadmap for every detailed design.
+```
+
+The [estimating designs skill](../skills/estimating-designs/SKILL.md) stops if
+there are no detailed designs. Otherwise it estimates developer-days per design
+from its behaviours and complexity, measures percent complete from implementation
+and acceptance-test evidence, and writes one brief table per subsystem plus a
+root README with the effort-weighted rollup and a roadmap. Work that `AGENTS.md`
+lists as deferred is excluded. Run it again to refresh: estimates stay stable
+unless a design changes, and percentages are recalculated. Its bundled script
+computes and verifies the figures:
+
+```sh
+python .agents/skills/estimating-designs/scripts/estimates.py inventory docs/detailed-designs
+python .agents/skills/estimating-designs/scripts/estimates.py rollup docs/estimates
+python .agents/skills/estimating-designs/scripts/estimates.py check docs/detailed-designs docs/estimates
+```
 
 ## Create application demo videos
 
@@ -520,6 +550,7 @@ files from surviving an update. Identical installed skills are left in place.
 | The agent-file generator reports a missing template | Restore the skill's `assets/` directory. Regeneration from source requires a Primer checkout, as described in the skill. |
 | The agent-file generator reports `Not a directory` | Create the target project directory before running the command. |
 | Design-system skill refuses to run | It extracts from `docs/mocks/`; run `writing-html-mocks` first. |
+| Estimating skill refuses to run | It estimates per design in `docs/detailed-designs/`; run `writing-design-documents` first. |
 | Mock checker reports missing states | Add the state file or declare it under `not_applicable` with a reason in `manifest.json`; never remove required states. |
 | Contrast check fails | Adjust the primitive colour the failing semantic token aliases, keep the token names, and rerun; aim for margin above 4.5:1 and 3:1. |
 | Mock screenshots cannot run | Install the Python `playwright` package or run `npx playwright install chromium`; otherwise review the HTML directly and report the remaining command. |

@@ -7,6 +7,15 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- Estimating skill (`estimating-designs`): writes `docs/estimates/` with one
+  brief table per subsystem giving each detailed design's developer-day effort
+  and evidence-based percent complete, plus a root README with the
+  effort-weighted rollup and a short dependency-ordered roadmap, excluding
+  deferred work. Ships effort heuristics, a worked example, a standard-library
+  `estimates.py` with `inventory`, `rollup`, and `check` commands, Codex UI
+  metadata, and evaluation scenarios. Advanced both plugin manifests to `0.7.0`
+  and updated the catalog, getting-started guide, and manifest descriptions to
+  cover all nine skills.
 - Screen composition skill (`writing-screen-composition`): maps every page,
   dialog, notification, and shell part in `docs/mocks/` to the component-library
   components that build it and the UI to build locally, writes
