@@ -7,6 +7,15 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- Implementation prompt skill (`writing-feature-prompts`): turns a feature
+  request or bug report into one ready-to-run prompt, written outside the
+  repository and opened in Notepad (or the platform's text editor). Feature
+  prompts run mocks, design system, requirements, detailed design, estimate
+  update and incremental ATDD implementation end to end without stopping;
+  bug-fix prompts run reproduce, root cause, fix and documentation alignment.
+  Includes Codex UI metadata. Advanced both plugin manifests to `0.8.0` and
+  updated the catalog, getting-started guide, and manifest descriptions to
+  cover all ten skills.
 - Estimating skill (`estimating-designs`): writes `docs/estimates/` with one
   brief table per subsystem giving each detailed design's developer-day effort
   and evidence-based percent complete, plus a root README with the
