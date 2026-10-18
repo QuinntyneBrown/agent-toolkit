@@ -46,7 +46,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all nine skills
+The first command registers the marketplace; the second installs all ten skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -65,6 +65,7 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:extracting-design-systems Extract the design system from docs/mocks/.
 /agent-toolkit:writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library.
 /agent-toolkit:estimating-designs Estimate effort and percent complete for docs/detailed-designs/.
+/agent-toolkit:writing-feature-prompts Write an implementation prompt for this feature request and open it in Notepad.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -204,6 +205,9 @@ my-app/
         │   ├── references/
         │   ├── scripts/
         │   └── evals/
+        ├── writing-feature-prompts/
+        │   ├── SKILL.md
+        │   └── agents/openai.yaml
         └── creating-narrated-videos/
             ├── SKILL.md
             └── agents/openai.yaml
@@ -217,7 +221,7 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/writing-agent-instructions`, `/writing-requirements`,
 `/writing-design-documents`, `/writing-html-mocks`, `/extracting-design-systems`,
-`/writing-screen-composition`, `/estimating-designs`,
+`/writing-screen-composition`, `/estimating-designs`, `/writing-feature-prompts`,
 `/recording-demo-videos`, and `/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
 does not replace `SKILL.md`.
 
@@ -371,6 +375,25 @@ python .agents/skills/estimating-designs/scripts/estimates.py inventory docs/det
 python .agents/skills/estimating-designs/scripts/estimates.py rollup docs/estimates
 python .agents/skills/estimating-designs/scripts/estimates.py check docs/detailed-designs docs/estimates
 ```
+
+## Write implementation prompts
+
+To hand a feature request or a bug fix to an agent as one end-to-end run, invoke:
+
+```text
+$writing-feature-prompts Write an implementation prompt for letting members renew a loan, and open it in Notepad.
+```
+
+The [writing feature prompts skill](../skills/writing-feature-prompts/SKILL.md)
+reads `AGENTS.md` and the files, requirements, mocks and designs the request
+touches, then writes one prompt outside the repository and opens it in Notepad
+(`open -t` on macOS, `xdg-open` on Linux). A feature prompt runs mocks, design
+system, requirements, detailed design, estimate update and incremental
+acceptance-test-driven implementation in order, and tells the agent not to stop
+until a pull request has green checks. A bug-fix prompt runs reproduce, root
+cause, fix and documentation alignment. Phases for artefacts the project does
+not use are left out. The skill writes the prompt only; it does not change the
+repository.
 
 ## Create application demo videos
 

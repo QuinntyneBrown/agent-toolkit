@@ -33,6 +33,9 @@ that trace back to testable requirements.
   resources together so they can be copied into a consuming project.
 - **Verified application demos.** Discover runnable applications and record
   narrated, captioned walkthroughs with posters, chapters, and reproducible commands.
+- **End-to-end implementation prompts.** Turn a feature request or bug report
+  into one prompt that runs mocks, design system, requirements, design,
+  estimates and test-driven implementation through to a pull request.
 - **Narrated explainer videos.** Author a transcript, a cued HTML slide deck,
   and an outline, then synthesize narration and encode a captioned 1080p MP4.
 
@@ -47,6 +50,7 @@ that trace back to testable requirements.
 | [Extracting design systems](skills/extracting-design-systems/SKILL.md) | Extract tokens, foundations, patterns, and one documented page per component from the mocks, with contrast verified for both themes. | `docs/design-system/` with `tokens/`, `foundations/`, `components/`, and `patterns/` |
 | [Writing screen composition](skills/writing-screen-composition/SKILL.md) | Map every page, dialog, notification, and shell part in the mocks to the component-library components that build it, and to the UI that must be built locally. | `docs/screen-composition.md`, plus the "Components library is mandatory" section in `AGENTS.md` |
 | [Estimating designs](skills/estimating-designs/SKILL.md) | Estimate developer-days for every detailed design, measure percent complete from code and test evidence, and set a short roadmap. | `docs/estimates/README.md` and one `docs/estimates/{subsystem}.md` table per subsystem |
+| [Writing feature prompts](skills/writing-feature-prompts/SKILL.md) | Turn a feature request or bug report into one end-to-end implementation prompt that runs every phase, from mocks to a pull request, without stopping, and open it in a text editor. | A `<slug>-prompt.md` file outside the repository, opened in Notepad or the platform's editor |
 | [Recording demo videos](skills/recording-demo-videos/SKILL.md) | Understand and run executable applications, then record verified, voice-narrated walkthroughs of each. | `docs/demo/` videos, posters, narration text, and a README; recording scripts in the project's test or script structure |
 | [Creating narrated videos](skills/creating-narrated-videos/SKILL.md) | Script, build, and verify a narrated slide-deck video about the repository or product. | `docs/videos/NN-topic/` with `script.md`, `slides.html`, `README.md`, an MP3, and a captioned MP4 |
 
@@ -105,7 +109,7 @@ Or run the equivalent commands inside Claude Code:
 ```
 
 For either client, the first command registers the marketplace and the second
-installs one plugin containing all nine skills. Terminal commands default to
+installs one plugin containing all ten skills. Terminal commands default to
 user scope; choose user scope if Claude's interactive installer asks. Start a
 new session in your consuming project after installation. GitHub installation
 requires the marketplace files to be published on this repository's default branch.
@@ -137,6 +141,12 @@ updates, local checkout testing, and switching from manually copied skills.
 
    ```text
    $estimating-designs Create docs/estimates/ with effort, percent complete and a roadmap for every detailed design.
+   ```
+
+   To hand a whole feature or bug fix to an agent in one run, write its prompt:
+
+   ```text
+   $writing-feature-prompts Write an implementation prompt for letting members renew a loan, and open it in Notepad.
    ```
 
 4. Before frontend work, mock every screen and state, then extract the design system:
@@ -178,6 +188,7 @@ plugin skills with their namespace:
 /agent-toolkit:extracting-design-systems Extract the design system from docs/mocks/.
 /agent-toolkit:writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library.
 /agent-toolkit:estimating-designs Estimate effort and percent complete for docs/detailed-designs/.
+/agent-toolkit:writing-feature-prompts Write an implementation prompt for this feature request and open it in Notepad.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -271,6 +282,9 @@ agent-toolkit/
 │   │   ├── references/
 │   │   ├── scripts/
 │   │   └── evals/
+│   ├── writing-feature-prompts/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── creating-narrated-videos/
 │       ├── SKILL.md
 │       └── agents/openai.yaml
