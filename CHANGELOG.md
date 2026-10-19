@@ -7,6 +7,13 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- One-shot build skill (`building-apps-end-to-end`): collects the idea, stack,
+  features, look and feel, name, repository and scope in a plan stage, gets the
+  plan approved, then runs the 14-step workflow (agent instructions, mocks,
+  design system, specs, detailed designs, estimates, incremental ATDD
+  implementation) without stopping. Includes Codex UI metadata. Advanced both
+  plugin manifests to `0.9.0` and updated the catalog, getting-started guide,
+  and manifest descriptions to cover all eleven skills.
 - Implementation prompt skill (`writing-feature-prompts`): turns a feature
   request or bug report into one ready-to-run prompt, written outside the
   repository and opened in Notepad (or the platform's text editor). Feature
