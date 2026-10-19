@@ -46,7 +46,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all ten skills
+The first command registers the marketplace; the second installs all eleven skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -66,6 +66,7 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:writing-screen-composition Create docs/screen-composition.md from docs/mocks/ and the component library.
 /agent-toolkit:estimating-designs Estimate effort and percent complete for docs/detailed-designs/.
 /agent-toolkit:writing-feature-prompts Write an implementation prompt for this feature request and open it in Notepad.
+/agent-toolkit:building-apps-end-to-end Build a library lending app end to end.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -208,6 +209,9 @@ my-app/
         ├── writing-feature-prompts/
         │   ├── SKILL.md
         │   └── agents/openai.yaml
+        ├── building-apps-end-to-end/
+        │   ├── SKILL.md
+        │   └── agents/openai.yaml
         └── creating-narrated-videos/
             ├── SKILL.md
             └── agents/openai.yaml
@@ -221,7 +225,7 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/writing-agent-instructions`, `/writing-requirements`,
 `/writing-design-documents`, `/writing-html-mocks`, `/extracting-design-systems`,
-`/writing-screen-composition`, `/estimating-designs`, `/writing-feature-prompts`,
+`/writing-screen-composition`, `/estimating-designs`, `/writing-feature-prompts`, `/building-apps-end-to-end`,
 `/recording-demo-videos`, and `/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
 does not replace `SKILL.md`.
 
@@ -394,6 +398,22 @@ until a pull request has green checks. A bug-fix prompt runs reproduce, root
 cause, fix and documentation alignment. Phases for artefacts the project does
 not use are left out. The skill writes the prompt only; it does not change the
 repository.
+
+## Build an app end to end
+
+To build a whole app and its supporting documents from one idea, invoke:
+
+```text
+$building-apps-end-to-end Build a library lending app with an Angular frontend and a .NET API.
+```
+
+The [building apps end to end skill](../skills/building-apps-end-to-end/SKILL.md)
+first asks for everything it needs in a plan stage (idea, stack, features, look
+and feel, name, repository and scope) and waits for approval. It then runs every
+step without stopping: agent instructions, HTML mocks, design system, L1/L2
+requirements, detailed designs, estimates, and an incremental
+acceptance-test-driven implementation. For a feature in an existing app, use
+`writing-feature-prompts` instead.
 
 ## Create application demo videos
 
