@@ -46,7 +46,7 @@ Inside Claude Code, the equivalent commands are:
 /plugin install agent-toolkit@agent-toolkit
 ```
 
-The first command registers the marketplace; the second installs all eleven skills
+The first command registers the marketplace; the second installs all twelve skills
 as one `agent-toolkit` plugin. Terminal commands use user scope by default. Choose
 user scope if Claude's interactive installer prompts for a scope. Start a new
 session in the consuming project afterward. Neither a manual clone nor Python is
@@ -67,6 +67,7 @@ the `agent-toolkit:` namespace. In Claude Code, use:
 /agent-toolkit:estimating-designs Estimate effort and percent complete for docs/detailed-designs/.
 /agent-toolkit:writing-feature-prompts Write an implementation prompt for this feature request and open it in Notepad.
 /agent-toolkit:building-apps-end-to-end Build a library lending app end to end.
+/agent-toolkit:implementing-incrementally Implement the next task from the plan in thin, tested slices.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -212,6 +213,10 @@ my-app/
         ├── building-apps-end-to-end/
         │   ├── SKILL.md
         │   └── agents/openai.yaml
+        ├── implementing-incrementally/
+        │   ├── SKILL.md
+        │   ├── LICENSE
+        │   └── agents/openai.yaml
         └── creating-narrated-videos/
             ├── SKILL.md
             └── agents/openai.yaml
@@ -225,7 +230,7 @@ restart Codex. In the CLI or IDE, use `/skills` or type `$` to select a skill.
 The same complete folders can be copied into `<project>/.claude/skills/` or
 `~/.claude/skills/`. Use `/writing-agent-instructions`, `/writing-requirements`,
 `/writing-design-documents`, `/writing-html-mocks`, `/extracting-design-systems`,
-`/writing-screen-composition`, `/estimating-designs`, `/writing-feature-prompts`, `/building-apps-end-to-end`,
+`/writing-screen-composition`, `/estimating-designs`, `/writing-feature-prompts`, `/building-apps-end-to-end`, `/implementing-incrementally`,
 `/recording-demo-videos`, and `/creating-narrated-videos` there. Codex-specific `agents/openai.yaml` metadata
 does not replace `SKILL.md`.
 
@@ -414,6 +419,22 @@ step without stopping: agent instructions, HTML mocks, design system, L1/L2
 requirements, detailed designs, estimates, and an incremental
 acceptance-test-driven implementation. For a feature in an existing app, use
 `writing-feature-prompts` instead.
+
+## Implement incrementally
+
+To land a feature or multi-file change one slice at a time, invoke:
+
+```text
+$implementing-incrementally Implement the next task from the plan in thin, tested slices.
+```
+
+The [implementing incrementally skill](../skills/implementing-incrementally/SKILL.md)
+builds one thin vertical slice at a time: implement the smallest complete piece,
+run the repository's tests and build, verify the behaviour, and commit before
+starting the next slice. It keeps every increment compilable and independently
+revertable, keeps changes inside the task's scope, and puts unfinished features
+behind a flag. The skill is adapted from Addy Osmani's MIT-licensed agent skills;
+its `LICENSE` file travels with the folder.
 
 ## Create application demo videos
 

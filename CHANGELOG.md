@@ -7,6 +7,15 @@ under **Unreleased** until a release is published.
 
 ### Added
 
+- Incremental implementation skill (`implementing-incrementally`): delivers a
+  feature or multi-file change in thin vertical slices, each implemented,
+  tested, verified and committed before the next, with slicing strategies,
+  scope discipline, feature flags and rollback-friendly increments. Copied from
+  the shelfie project with references to skills and files outside this
+  repository made self-contained; keeps its MIT `LICENSE` (Addy Osmani).
+  Includes Codex UI metadata. Advanced both plugin manifests to `0.10.0` and
+  updated the catalog, getting-started guide, and manifest descriptions to
+  cover all twelve skills.
 - One-shot build skill (`building-apps-end-to-end`): collects the idea, stack,
   features, look and feel, name, repository and scope in a plan stage, gets the
   plan approved, then runs the 14-step workflow (agent instructions, mocks,

@@ -38,6 +38,8 @@ that trace back to testable requirements.
   estimates and test-driven implementation through to a pull request.
 - **One-shot app builds.** Plan once, then build a whole app from a single idea:
   mocks, design system, specs, designs, estimates and test-driven code, without stopping.
+- **Incremental implementation.** Deliver a change in thin vertical slices, each
+  one tested, verified and committed before the next begins.
 - **Narrated explainer videos.** Author a transcript, a cued HTML slide deck,
   and an outline, then synthesize narration and encode a captioned 1080p MP4.
 
@@ -54,6 +56,7 @@ that trace back to testable requirements.
 | [Estimating designs](skills/estimating-designs/SKILL.md) | Estimate developer-days for every detailed design, measure percent complete from code and test evidence, and set a short roadmap. | `docs/estimates/README.md` and one `docs/estimates/{subsystem}.md` table per subsystem |
 | [Writing feature prompts](skills/writing-feature-prompts/SKILL.md) | Turn a feature request or bug report into one end-to-end implementation prompt that runs every phase, from mocks to a pull request, without stopping, and open it in a text editor. | A `<slug>-prompt.md` file outside the repository, opened in Notepad or the platform's editor |
 | [Building apps end to end](skills/building-apps-end-to-end/SKILL.md) | Collect the idea, stack, features and look in one plan stage, then run the 14-step workflow from agent instructions to an incremental, acceptance-test-driven implementation without stopping. | A complete repository: `AGENTS.md`, `docs/` (mocks, design system, specs, detailed designs, estimates) and a running app |
+| [Implementing incrementally](skills/implementing-incrementally/SKILL.md) | Deliver a feature or multi-file change in thin vertical slices, testing, verifying and committing each slice before starting the next. | Small, focused commits that each leave the build and tests green |
 | [Recording demo videos](skills/recording-demo-videos/SKILL.md) | Understand and run executable applications, then record verified, voice-narrated walkthroughs of each. | `docs/demo/` videos, posters, narration text, and a README; recording scripts in the project's test or script structure |
 | [Creating narrated videos](skills/creating-narrated-videos/SKILL.md) | Script, build, and verify a narrated slide-deck video about the repository or product. | `docs/videos/NN-topic/` with `script.md`, `slides.html`, `README.md`, an MP3, and a captioned MP4 |
 
@@ -112,7 +115,7 @@ Or run the equivalent commands inside Claude Code:
 ```
 
 For either client, the first command registers the marketplace and the second
-installs one plugin containing all eleven skills. Terminal commands default to
+installs one plugin containing all twelve skills. Terminal commands default to
 user scope; choose user scope if Claude's interactive installer asks. Start a
 new session in your consuming project after installation. GitHub installation
 requires the marketplace files to be published on this repository's default branch.
@@ -193,6 +196,7 @@ plugin skills with their namespace:
 /agent-toolkit:estimating-designs Estimate effort and percent complete for docs/detailed-designs/.
 /agent-toolkit:writing-feature-prompts Write an implementation prompt for this feature request and open it in Notepad.
 /agent-toolkit:building-apps-end-to-end Build a library lending app end to end.
+/agent-toolkit:implementing-incrementally Implement the next task from the plan in thin, tested slices.
 /agent-toolkit:recording-demo-videos Create a demo video for each executable application.
 /agent-toolkit:creating-narrated-videos Create a narrated video that explains the loan workflow.
 ```
@@ -291,6 +295,10 @@ agent-toolkit/
 │   │   └── agents/openai.yaml
 │   ├── building-apps-end-to-end/
 │   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
+│   ├── implementing-incrementally/
+│   │   ├── SKILL.md
+│   │   ├── LICENSE
 │   │   └── agents/openai.yaml
 │   └── creating-narrated-videos/
 │       ├── SKILL.md
